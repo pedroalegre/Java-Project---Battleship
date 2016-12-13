@@ -19,8 +19,8 @@ public class Player {
 
     public Player() {}
 
-    public Player(String email) {
-        userName = email;
+    public Player(String userName) {
+        this.userName = userName;
     }
 
     public String getUserName() {
