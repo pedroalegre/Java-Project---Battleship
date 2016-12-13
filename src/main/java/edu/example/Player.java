@@ -15,36 +15,12 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String firstName;
-    private String lastName;
     private String userName;
 
     public Player() {}
 
-    public Player(String first, String last, String email) {
+    public Player(String email) {
         userName = email;
-        firstName = first;
-        lastName = last;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String toString() {
-        return firstName + " " + lastName;
     }
 
     public String getUserName() {

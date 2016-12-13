@@ -20,8 +20,6 @@ $(function() {
   // handler for when user clicks add person
 
   function addPlayer() {
-    var first = $("#first").val();
-    var last = $("#last").val();
     var name = $("#email").val();
     if (name) {
       postPlayer(name);
@@ -34,14 +32,14 @@ $(function() {
   // code to post a new player using AJAX
   // on success, reload and data from server
 
-  function postPlayer(firstName, lastName, userName) {
+  function postPlayer(userName) {
     $.post({
       headers: {
           'Content-Type': 'application/json'
       },
       dataType: "text",
       url: "/players",
-      data: JSON.stringify({ "firstName": firstName, "lastName": lastName, "userName": userName })
+      data: JSON.stringify({ "userName": userName })
     })
     .done(function( ) {
       showOutput( "Saved -- reloading");
