@@ -19,15 +19,15 @@ public class Player {
 
     public Player() {}
 
-    public Player(String userName) {
-        this.userName = userName;
+    public Player(String email) {
+        this.userName = email;
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String email) {
+        this.userName = email;
     }
 }
