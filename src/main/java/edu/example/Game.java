@@ -18,8 +18,12 @@ public class Game {
 	private long id;
 	private Date creationDate;
 
-	public Game() {
+	public Game() {}
+
+	public Game(long time) {
 		this.creationDate = new Date();
+		Date newDate = Date.from(creationDate.toInstant().plusSeconds(time));
+		creationDate = newDate;
 	}
 
 	public Date getCreationDate() {
