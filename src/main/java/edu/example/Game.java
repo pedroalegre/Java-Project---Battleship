@@ -16,14 +16,18 @@ public class Game {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	private String creationDate;
+	private Date creationDate;
 
-	public Game(String date) {
-		creationDate = date;
+	public Game() {
+		this.creationDate = new Date();
 	}
 
-	public String getCreationDate() { return creationDate; }
+	public Date getCreationDate() {
+		return creationDate;
+	}
 
-	public void setCreationDate(String creationDate) { this.creationDate = creationDate; }
+	public void setCreationDate(Date date) {
+		this.creationDate = date;
+	}
 
 }
