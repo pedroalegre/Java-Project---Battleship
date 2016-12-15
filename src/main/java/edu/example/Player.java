@@ -5,9 +5,12 @@
 package edu.example;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
 @Entity
 public class Player {
@@ -30,4 +33,7 @@ public class Player {
     public void setUserName(String email) {
         this.userName = email;
     }
+
+    @OneToMany(mappedBy="player", fetch = FetchType.EAGER)
+    Set<GamePlayer> players;
 }
