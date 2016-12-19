@@ -30,9 +30,7 @@ public class SalvoController {
 
 		gamesMap.put("id", game.getId());
 		gamesMap.put("created", game.getCreationDate());
-		gamesMap.put("GamePlayers", game.games.stream().map(gp -> gp.getId()).collect(Collectors.toList()));
 		gamesMap.put("GamePlayers", game.games.stream().map(gp -> makeGamePlayerDTO(gp)).collect(Collectors.toList()));
-		gamesMap.put("player", game.games.stream().map(p -> p.getPlayer()).collect(Collectors.toList()));
 
 		return gamesMap;
 	}
