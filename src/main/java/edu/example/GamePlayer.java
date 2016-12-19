@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 public class GamePlayer {
@@ -52,4 +52,8 @@ public class GamePlayer {
 	public Game getGame() { return game; }
 
 	public void setGame(Game game) { this.game = game; }
+
+	public long getId() {
+		return id;
+	}
 }

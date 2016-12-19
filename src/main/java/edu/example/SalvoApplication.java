@@ -35,8 +35,9 @@ public class SalvoApplication {
 
 			// save a few gamePlayers
 			gamePlayer.save(new GamePlayer(p1, g1));
+			gamePlayer.save(new GamePlayer(p2, g1));
 			gamePlayer.save(new GamePlayer(p2, g2));
-			gamePlayer.save(new GamePlayer(p3, g3));
+			gamePlayer.save(new GamePlayer(p3, g1));
 		};
 	}
 }

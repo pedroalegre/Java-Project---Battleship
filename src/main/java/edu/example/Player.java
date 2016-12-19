@@ -26,6 +26,10 @@ public class Player {
         this.userName = email;
     }
 
+    public long getId() {
+        return id;
+    }
+
     public String getUserName() {
         return userName;
     }
