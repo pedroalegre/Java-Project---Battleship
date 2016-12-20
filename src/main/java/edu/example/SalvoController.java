@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -22,10 +21,10 @@ public class SalvoController {
 
 	@RequestMapping("/games")
 	public List<Object> getGame() {
-		return game.findAll().stream().map(game -> getJsonMap(game)).collect(Collectors.toList());
+		return game.findAll().stream().map(game -> makeGameDTO(game)).collect(Collectors.toList());
 	}
 
-	private Map<String, Object> getJsonMap(Game game) {
+	private Map<String, Object> makeGameDTO(Game game) {
 		Map<String, Object> gamesMap = new LinkedHashMap<>();
 
 		gamesMap.put("id", game.getId());

@@ -21,6 +21,9 @@ public class Game {
 	private long id;
 	private Date creationDate;
 
+	@OneToMany(mappedBy="game", fetch = FetchType.EAGER)
+	Set<GamePlayer> games;
+
 	public Game() {}
 
 	public Game(long time) {
@@ -38,7 +41,4 @@ public class Game {
 	public void setCreationDate(Date date) {
 		this.creationDate = date;
 	}
-
-	@OneToMany(mappedBy="game", fetch = FetchType.EAGER)
-	Set<GamePlayer> games;
 }
