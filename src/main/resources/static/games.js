@@ -11,7 +11,9 @@ $(function() {
         $.each( games, function( key, game ) {
         console.log("Ahi va");
         console.log(game);
-            gamesList.push( "<li id='" + game.id + "'>" + game.created + "</li>" );
+            var gameDate = new Date(game.created);
+            console.log(gameDate);
+            gamesList.push( "<li id='" + game.id + "'>" + gameDate + "</li>" );
         });
 
         $("#output").append(gamesList.join( "" ));
