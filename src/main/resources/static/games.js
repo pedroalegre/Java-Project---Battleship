@@ -11,9 +11,19 @@ $(function() {
         $.each( games, function( key, game ) {
         console.log("Ahi va");
         console.log(game);
-            var gameDate = new Date(game.created);
-            console.log(gameDate);
-            gamesList.push( "<li id='" + game.id + "'>" + gameDate + "</li>" );
+
+            gamesList.push( "<li id='" + game.id + "'>" + new Date(game.created).toLocaleString());
+
+            var gamePlayerList = game.GamePlayers;
+
+            $.each( gamePlayerList, function(key, player) {
+                var player = gamePlayerList[key].player;
+
+                gamesList.push(", " + player.userName);
+            });
+
+            gamesList.push("</li>");
+
         });
 
         $("#output").append(gamesList.join( "" ));
