@@ -1,6 +1,15 @@
 package edu.example;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,4 +34,20 @@ public class Ship {
 	private List<String> shipLocations = new ArrayList<>();
 
 	public Ship() {}
+
+	public Ship(String shipType) {
+		this.shipType = shipType;
+	}
+
+	private long getId() { return id; }
+
+	public String getShipType() {
+		return shipType;
+	}
+
+	public void setShipType(String shipType) {
+		this.shipType = shipType;
+	}
+
+	public void setGamePlayer(GamePlayer gamePlayer) { this.gamePlayer = gamePlayer; }
 }
