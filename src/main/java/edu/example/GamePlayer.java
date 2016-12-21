@@ -4,13 +4,7 @@ package edu.example;
  * Created by Pedro on 15-Dec-16.
  */
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.*;
 
 @Entity
@@ -27,6 +21,10 @@ public class GamePlayer {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="game_id")
 	private Game game;
+
+	@OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+	Set<Ship> gamePlayers;
+
 
 	public GamePlayer() {}
 
