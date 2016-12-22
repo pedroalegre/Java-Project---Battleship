@@ -35,8 +35,9 @@ public class Ship {
 
 	public Ship() {}
 
-	public Ship(String shipType) {
+	public Ship(String shipType, List<String> shipLocations) {
 		this.shipType = shipType;
+		this.shipLocations = shipLocations;
 	}
 
 	private long getId() { return id; }
@@ -48,6 +49,8 @@ public class Ship {
 	public void setShipType(String shipType) {
 		this.shipType = shipType;
 	}
+
+	public List<String> shipLocation() { return this.shipLocations; }
 
 	public void setGamePlayer(GamePlayer gamePlayer) { this.gamePlayer = gamePlayer; }
 }

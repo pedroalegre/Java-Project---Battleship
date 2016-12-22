@@ -1,6 +1,7 @@
 package edu.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,9 @@ public class SalvoController {
 
 	@Autowired
 	private GameRepository game;
+
+	@Autowired
+	private GamePlayerRepository gamePlayerRepository;
 
 	@RequestMapping("/games")
 	public List<Object> getGame() {
@@ -41,5 +45,29 @@ public class SalvoController {
 		gpMap.put("player", gp.getPlayer());
 
 		return gpMap;
+	}
+
+	@RequestMapping("/game_view/{gameId}")
+	private Map<String, Object> getGameView(@PathVariable Long gameId) {
+		Map<String, Object> gameViewMap = new LinkedHashMap<>();
+
+		gameViewMap.put("id", game.findOne(gameId).getId());
+		gameViewMap.put("created", game.findOne(gameId).getCreationDate());
+		gameViewMap.put("GamePlayers", gamePlayerRepository.findAll().stream()
+				.filter(gpv2 -> gpv2.getGame().getId() == gameId)
+				.map(gpv -> makeGamePlayerGameViewDTO(gpv))
+				.collect(Collectors.toList()));
+		//gameViewMap.put("GamePlayers", gamePlayerRepository.findOne())
+
+		return gameViewMap;
+	}
+
+	private Map<String, Object> makeGamePlayerGameViewDTO(GamePlayer gp) {
+		Map<String, Object> gpvMap = new LinkedHashMap<>();
+
+		gpvMap.put("id", gp.getId());
+		gpvMap.put("player", gp.getPlayer());
+
+		return gpvMap;
 	}
 }

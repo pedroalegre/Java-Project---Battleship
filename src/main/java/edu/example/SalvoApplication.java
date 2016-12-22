@@ -5,6 +5,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @SpringBootApplication
 public class SalvoApplication {
 
@@ -24,11 +28,18 @@ public class SalvoApplication {
 			Game g2 = new Game(3600);
 			Game g3 = new Game(7200);
 
-			Ship s1 = new Ship("Destroyer");
-			Ship s2 = new Ship("Carrier");
-			Ship s3 = new Ship("Battleship");
-			Ship s4 = new Ship("Submarine");
-			Ship s5 = new Ship("Patrol Boat");
+			List<String> loc1 = Arrays.asList("a2", "b2");
+			List<String> loc2 = Arrays.asList("f5", "f6", "f7");
+			List<String> loc3 = Arrays.asList("c1");
+			List<String> loc4 = Arrays.asList("b3", "b4", "b5", "b6");
+			List<String> loc5 = Arrays.asList("g4", "h4");
+
+
+			Ship s1 = new Ship("Destroyer", loc2);
+			Ship s2 = new Ship("Carrier", loc4);
+			Ship s3 = new Ship("Battleship", loc1);
+			Ship s4 = new Ship("Submarine", loc3);
+			Ship s5 = new Ship("Patrol Boat", loc5);
 
 			GamePlayer gp1 = new GamePlayer(p1, g1);
 			GamePlayer gp2 = new GamePlayer(p2, g1);
