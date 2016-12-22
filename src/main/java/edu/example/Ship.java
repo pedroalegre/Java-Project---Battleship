@@ -50,7 +50,7 @@ public class Ship {
 		this.shipType = shipType;
 	}
 
-	public List<String> shipLocation() { return this.shipLocations; }
+	public List<String> getShipLocations() { return this.shipLocations; }
 
 	public void setGamePlayer(GamePlayer gamePlayer) { this.gamePlayer = gamePlayer; }
 }
