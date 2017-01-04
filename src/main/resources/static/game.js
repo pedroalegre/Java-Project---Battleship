@@ -8,9 +8,7 @@ function drawGrid() {
     createHeader();
     createRow();
 
-    console.log(location.search);
-
-    paramObj(location.search);
+    drawShips(getGamePlayerPath(location.search));
 }
 
 function createHeader() {
@@ -41,17 +39,38 @@ function createRow() {
     });
 }
 
-$(function(obj) {
-    var url = "api/game_view/" + obj;
-});
+function drawShips (gamePlayerValue) {
+    var url = "api/game_view/" + gamePlayerValue.gp;
 
-function paramObj(search) {
-    var obj = {};
+    $.getJSON( url, function(data) {
+
+        //show the game and players info
+        $.each( data.GamePlayers, function(player) {
+            var playerName = data.GamePlayers[player].player.userName;
+
+            if(gamePlayerValue.gp == data.GamePlayers[player].id) {
+                $(".playerInfo").append(playerName + " (You)");
+            } else {
+                $(".playerInfo").append(playerName);
+            }
+        });
+
+        // draw the ships
+        $.each( data.ships, function(ship) {
+            var shipLocation = data.ships[ship].locations;
+            $.each( shipLocation, function(cell) {
+                $("#" + shipLocation[cell]).addClass("hasShip");
+            });
+        });
+    });
+};
+
+function getGamePlayerPath(path) {
+    var gamePlayerValue = {};
     var reg = /(?:[?&]([^?&#=]+)(?:=([^&#]*))?)(?:#.*)?/g;
 
-    search.replace(reg, function(match, param, val) {
-        obj[decodeURIComponent(param)] = val === undefined ? "" : decodeURIComponent(val);
+    path.replace(reg, function(match, param, val) {
+        gamePlayerValue[decodeURIComponent(param)] = val === undefined ? "" : decodeURIComponent(val);
     });
-    console.log(obj);
-    return obj;
+    return gamePlayerValue;
 }

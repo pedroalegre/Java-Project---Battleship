@@ -28,11 +28,11 @@ public class SalvoApplication {
 			Game g2 = new Game(3600);
 			Game g3 = new Game(7200);
 
-			List<String> loc1 = Arrays.asList("a2", "b2");
-			List<String> loc2 = Arrays.asList("f5", "f6", "f7");
-			List<String> loc3 = Arrays.asList("c1");
-			List<String> loc4 = Arrays.asList("b3", "b4", "b5", "b6");
-			List<String> loc5 = Arrays.asList("g4", "h4");
+			List<String> loc1 = Arrays.asList("A2", "B2");
+			List<String> loc2 = Arrays.asList("F5", "F6", "F7");
+			List<String> loc3 = Arrays.asList("C1");
+			List<String> loc4 = Arrays.asList("B3", "B4", "B5", "B6");
+			List<String> loc5 = Arrays.asList("G4", "H4");
 
 
 			Ship s1 = new Ship("Destroyer", loc2);
