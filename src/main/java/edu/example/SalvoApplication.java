@@ -44,7 +44,7 @@ public class SalvoApplication {
 			GamePlayer gp1 = new GamePlayer(p1, g1);
 			GamePlayer gp2 = new GamePlayer(p2, g1);
 			GamePlayer gp3 = new GamePlayer(p2, g2);
-			GamePlayer gp4 = new GamePlayer(p3, g1);
+			GamePlayer gp4 = new GamePlayer(p3, g2);
 
 			gp1.addShip(s4);
 			gp1.addShip(s3);

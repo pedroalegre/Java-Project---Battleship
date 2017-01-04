@@ -32,7 +32,7 @@ public class Game {
 		creationDate = newDate;
 	}
 
-	public long getId() { return id; }
+	public long getId() { return this.id; }
 
 	public Date getCreationDate() {
 		return creationDate;
@@ -41,4 +41,6 @@ public class Game {
 	public void setCreationDate(Date date) {
 		this.creationDate = date;
 	}
+
+	public Set<GamePlayer> getGamePlayers() { return games; }
 }

@@ -6,8 +6,11 @@ drawGrid();
 function drawGrid() {
 
     createHeader();
-
     createRow();
+
+    console.log(location.search);
+
+    paramObj(location.search);
 }
 
 function createHeader() {
@@ -24,7 +27,6 @@ function createHeader() {
 }
 
 function createRow() {
-
     $.each(rowHeader, function(i) {
         var row = $("<tr class='row'></tr>");
         $.each(columnHeader, function(j) {
@@ -37,5 +39,19 @@ function createRow() {
 
         $(".rows").append(row);
     });
+}
 
+$(function(obj) {
+    var url = "api/game_view/" + obj;
+});
+
+function paramObj(search) {
+    var obj = {};
+    var reg = /(?:[?&]([^?&#=]+)(?:=([^&#]*))?)(?:#.*)?/g;
+
+    search.replace(reg, function(match, param, val) {
+        obj[decodeURIComponent(param)] = val === undefined ? "" : decodeURIComponent(val);
+    });
+    console.log(obj);
+    return obj;
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -47,17 +48,16 @@ public class SalvoController {
 		return gpMap;
 	}
 
-	@RequestMapping("/game_view/{gameId}")
-	private Map<String, Object> getGameView(@PathVariable Long gameId) {
+	@RequestMapping("/game_view/{gamePlayerId}")
+	private Map<String, Object> getGameView(@PathVariable Long gamePlayerId) {
 		Map<String, Object> gameViewMap = new LinkedHashMap<>();
+		Set<GamePlayer> gamePlayers = gamePlayerRepository.findOne(gamePlayerId).getGame().getGamePlayers();
 
-		gameViewMap.put("id", game.findOne(gameId).getId());
-		gameViewMap.put("created", game.findOne(gameId).getCreationDate());
-		gameViewMap.put("GamePlayers", gamePlayerRepository.findAll().stream()
-				.filter(gpv2 -> gpv2.getGame().getId() == gameId)
-				.map(gpv -> makeGamePlayerGameViewDTO(gpv))
-				.collect(Collectors.toList()));
-		gameViewMap.put("ships", gamePlayerRepository.findOne(gameId).ships
+		gameViewMap.put("id", gamePlayerRepository.findOne(gamePlayerId).getGame().getId());
+		gameViewMap.put("created", gamePlayerRepository.findOne(gamePlayerId).getGame().getCreationDate());
+		gameViewMap.put("GamePlayers", gamePlayers.stream().map(gp -> makeGamePlayerGameViewDTO(gp)).collect(Collectors.toList()));
+
+		gameViewMap.put("ships", gamePlayerRepository.findOne(gamePlayerId).ships
 				.stream().map(ship -> makeShipsDTO(ship)).collect(Collectors.toList()));
 
 		return gameViewMap;
