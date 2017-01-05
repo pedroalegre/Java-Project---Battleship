@@ -1,14 +1,14 @@
 .grid {
     border-collapse: collapse;
+    width: 590px;
 }
 
 .cell {
     height:50px;
     width:50px;
-    border:0.5px solid black;
+    border:0.5px solid #0b3003;
     display:inline-block;
-
-    background: linear-gradient(to left top, #99ffff, #00ccff);
+    background: black;
 }
 
 .columnHeader, .rowHeader {
@@ -17,11 +17,43 @@
     width:50px;
     border:0.5px solid black;
     display:inline-block;
-    background-color: #008000;
-    color: white;
+    background-color: #8df776;
+    color: black;
     text-align: center;
 }
 
 .hasShip {
-    background: black;
+    background: #7ff12a;
+}
+
+
+.playerInfo {
+    width: 590px;
+    display: flex;
+    flex-direction; row;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.playerName, #vs {
+
+}
+
+.scan {
+    width: 589.6px;
+    height: 80px;
+    background: linear-gradient(rgba(0,0,0,0),#7ff12a);
+    position: absolute;
+    animation: scan;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    top: -85px;
+    z-index: 99;
+    opacity: 0.25;
+}
+
+@keyframes scan{
+  0{top:-80px;}
+  70%{top:700px;}
+  100%{top:700px;}
 }

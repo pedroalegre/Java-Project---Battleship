@@ -43,15 +43,16 @@ function drawShips (gamePlayerValue) {
     var url = "api/game_view/" + gamePlayerValue.gp;
 
     $.getJSON( url, function(data) {
+        playersTitle();
 
         //show the game and players info
         $.each( data.GamePlayers, function(player) {
             var playerName = data.GamePlayers[player].player.userName;
-
             if(gamePlayerValue.gp == data.GamePlayers[player].id) {
-                $(".playerInfo").append(playerName + " (You)");
+                $("#player1").append(playerName + " (You)");
+                $("#vs").append(" VS ");
             } else {
-                $(".playerInfo").append(playerName);
+                $("#player2").append(playerName);
             }
         });
 
@@ -73,4 +74,10 @@ function getGamePlayerPath(path) {
         gamePlayerValue[decodeURIComponent(param)] = val === undefined ? "" : decodeURIComponent(val);
     });
     return gamePlayerValue;
+}
+
+function playersTitle() {
+    $(".playerInfo").append("<div id=player1>");
+    $(".playerInfo").append("<div id=vs>");
+    $(".playerInfo").append("<div id=player2>");
 }
