@@ -18,7 +18,7 @@ public class SalvoApplication {
 
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository player, GameRepository game, GamePlayerRepository gamePlayer, ShipRepository ship) {
+	public CommandLineRunner initData(PlayerRepository player, GameRepository game, GamePlayerRepository gamePlayer, ShipRepository ship, SalvoRepository salvo) {
 		return (args) -> {
 			Player p1 = new Player("jbauer@test.com");
 			Player p2 = new Player("chloe@test.com");
@@ -51,6 +51,17 @@ public class SalvoApplication {
 			gp2.addShip(s1);
 			gp2.addShip(s2);
 
+			List<String> sloc1 = Arrays.asList("A2", "C3", "B7");
+			List<String> sloc2 = Arrays.asList("G3", "F6", "H8");
+			List<String> sloc3 = Arrays.asList("B4", "B5", "G4");
+
+			Salvo sal1 = new Salvo(1, sloc1);
+			Salvo sal2 = new Salvo(2, sloc2);
+			Salvo sal3 = new Salvo(3, sloc3);
+
+			gp1.addSalvo(sal1);
+			gp1.addSalvo(sal2);
+			gp2.addSalvo(sal3);
 
 			// save a few of players
 			player.save(p1);
@@ -74,6 +85,11 @@ public class SalvoApplication {
 			ship.save(s3);
 			ship.save(s4);
 			ship.save(s5);
+
+			// save a few salvoes
+			salvo.save(sal1);
+			salvo.save(sal2);
+			salvo.save(sal3);
 
 		};
 	}

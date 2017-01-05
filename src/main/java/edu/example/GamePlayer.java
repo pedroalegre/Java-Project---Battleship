@@ -25,6 +25,9 @@ public class GamePlayer {
 	@OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
 	Set<Ship>ships;
 
+	@OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+	Set<Salvo> salvoes;
+
 
 	public GamePlayer() {}
 
@@ -33,6 +36,7 @@ public class GamePlayer {
 		this.player = player;
 		this.game = game;
 		this.ships = new LinkedHashSet<>();
+		this.salvoes = new LinkedHashSet<>();
 	}
 
 	public Date getCreationDate() {
@@ -58,5 +62,10 @@ public class GamePlayer {
 	public void addShip(Ship ship) {
 		ship.setGamePlayer(this);
 		this.ships.add(ship);
+	}
+
+	public void addSalvo(Salvo salvo) {
+		salvo.setGamePlayer(this);
+		this.salvoes.add(salvo);
 	}
 }
