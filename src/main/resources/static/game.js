@@ -63,6 +63,12 @@ function drawShips (gamePlayerValue) {
                 $("#" + shipLocation[cell]).addClass("hasShip");
             });
         });
+
+        $.each(data.salvoes, function(salvo) {
+        console.log(data.salvoes);
+        	var salvo1 = data.salvoes[salvo];
+        	console.log(salvo1);
+        });
     });
 };
 

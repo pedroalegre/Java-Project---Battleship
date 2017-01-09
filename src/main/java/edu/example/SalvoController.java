@@ -5,10 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -51,16 +48,40 @@ public class SalvoController {
 	@RequestMapping("/game_view/{gamePlayerId}")
 	private Map<String, Object> getGameView(@PathVariable Long gamePlayerId) {
 		Map<String, Object> gameViewMap = new LinkedHashMap<>();
-		Set<GamePlayer> gamePlayers = gamePlayerRepository.findOne(gamePlayerId).getGame().getGamePlayers();
+		GamePlayer gamePlayer = gamePlayerRepository.findOne(gamePlayerId);
+		Set<GamePlayer> gamePlayers = gamePlayer.getGame().getGamePlayers();
 
-		gameViewMap.put("id", gamePlayerRepository.findOne(gamePlayerId).getGame().getId());
-		gameViewMap.put("created", gamePlayerRepository.findOne(gamePlayerId).getGame().getCreationDate());
+		gameViewMap.put("id", gamePlayer.getGame().getId());
+		gameViewMap.put("created", gamePlayer.getGame().getCreationDate());
 		gameViewMap.put("GamePlayers", gamePlayers.stream().map(gp -> makeGamePlayerGameViewDTO(gp)).collect(Collectors.toList()));
 
-		gameViewMap.put("ships", gamePlayerRepository.findOne(gamePlayerId).ships
+		gameViewMap.put("ships", gamePlayer.getShips()
 				.stream().map(ship -> makeShipsDTO(ship)).collect(Collectors.toList()));
 
+		gameViewMap.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().map(gp -> makeSalvoDTO(gp.getSalvoes())).collect(Collectors.toList()));
+		//gameViewMap.put("salvoes", gamePlayerRepository.findOne(gamePlayerId).salvoes
+		//		.stream().map(salvo -> makeSalvoesDTO(salvo)).collect(Collectors.toList()));
+
 		return gameViewMap;
+	}
+
+	private List<Map<String,Object>> makeSalvoDTO(Set<Salvo> salvoes) {
+
+		List<Map<String,Object>> result= new ArrayList<>();
+
+		for (Salvo salvo : salvoes) {
+			Map<String, Object> salvoMap = new LinkedHashMap<>();
+			long turn = salvo.getTurn();
+			List<String> salvoLocations = salvo.getSalvoLocations();
+			long id = salvo.getGamePlayer().getPlayer().getId();
+
+			salvoMap.put("turn", turn);
+			salvoMap.put("player", id);
+			salvoMap.put("locations", salvoLocations);
+
+			result.add(salvoMap);
+		}
+		return result;
 	}
 
 	private Map<String, Object> makeGamePlayerGameViewDTO(GamePlayer gp) {
@@ -80,4 +101,15 @@ public class SalvoController {
 
 		return shipsMap;
 	}
+
+	/*private Map<String, Object> makeSalvoesDTO(GamePlayer salvo) {
+		Map<String, Object> salvoesMap = new LinkedHashMap<>();
+
+		salvoesMap.put("turn", salvo.getTurn());
+		salvoesMap.put("player", salvo.getGamePlayer().getId());
+		salvoesMap.put("locations", salvo.getSalvoLocations());
+
+		return salvoesMap;
+	}
+	*/
 }
