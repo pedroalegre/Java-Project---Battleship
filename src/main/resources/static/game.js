@@ -41,7 +41,7 @@ function createRow() {
 
 function drawShips (gamePlayerValue) {
     var url = "api/game_view/" + gamePlayerValue.gp;
-
+	var playerId = 0;
     $.getJSON( url, function(data) {
         playersTitle();
 
@@ -51,6 +51,7 @@ function drawShips (gamePlayerValue) {
             if(gamePlayerValue.gp == data.GamePlayers[player].id) {
                 $("#player1").append(playerName + " (You)");
                 $("#vs").append(" VS ");
+                playerId = data.GamePlayers[player].player.id;
             } else {
                 $("#player2").append(playerName);
             }
@@ -67,7 +68,7 @@ function drawShips (gamePlayerValue) {
 		// draw the salvoes
         $.each(data.salvoes, function(salvo) {
         	var salvoLocation = data.salvoes[salvo];
-        	console.log(salvoLocation);
+
         	$.each( salvoLocation, function(cell) {
         		var salvoLocation2 = salvoLocation[cell].locations;
         		var turn = salvoLocation[cell].turn;
@@ -75,7 +76,7 @@ function drawShips (gamePlayerValue) {
 
 				$.each( salvoLocation2, function(cell) {
 					var cellLocation = $(".shipsGrid").find("#" + salvoLocation2[cell]);
-					if(gamePlayerValue.gp == player) {
+					if(player == playerId) {
 						$(".salvoesGrid").find("#" + salvoLocation2[cell]).addClass("hasSalvo").text(turn);
 					} else {
 						cellLocation.addClass("hasSalvo").text(turn);

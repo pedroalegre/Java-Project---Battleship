@@ -40,11 +40,11 @@
 }
 
 .hasSalvo {
-	background: red;
+	background: #66e0ff;
 }
 
 .hasHit {
-	background: grey;
+	background: red;
 }
 
 .scan {
