@@ -1,20 +1,25 @@
+.grids {
+	display: flex;
+	flex-direction: row;
+}
+
 .grid {
     border-collapse: collapse;
-    width: 590px;
+    width: 484px;
 }
 
 .cell {
-    height:50px;
-    width:50px;
+    height:40px;
+    width:40px;
     border:0.5px solid #0b3003;
     display:inline-block;
     background: black;
 }
 
 .columnHeader, .rowHeader {
-    line-height: 50px;
-    height:50px;
-    width:50px;
+    line-height: 40px;
+    height:40px;
+    width:40px;
     border:0.5px solid black;
     display:inline-block;
     background-color: #8df776;
@@ -22,25 +27,28 @@
     text-align: center;
 }
 
-.hasShip {
-    background: #7ff12a;
-}
-
-
 .playerInfo {
-    width: 590px;
+    width: 484px;
     display: flex;
     flex-direction; row;
     justify-content: space-between;
     margin-bottom: 5px;
 }
 
-.playerName, #vs {
+.hasShip {
+    background: #7ff12a;
+}
 
+.hasSalvo {
+	background: red;
+}
+
+.hasHit {
+	background: grey;
 }
 
 .scan {
-    width: 589.6px;
+    width: 484px;
     height: 80px;
     background: linear-gradient(rgba(0,0,0,0),#7ff12a);
     position: absolute;

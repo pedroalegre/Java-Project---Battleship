@@ -64,10 +64,27 @@ function drawShips (gamePlayerValue) {
             });
         });
 
+		// draw the salvoes
         $.each(data.salvoes, function(salvo) {
-        console.log(data.salvoes);
-        	var salvo1 = data.salvoes[salvo];
-        	console.log(salvo1);
+        	var salvoLocation = data.salvoes[salvo];
+        	console.log(salvoLocation);
+        	$.each( salvoLocation, function(cell) {
+        		var salvoLocation2 = salvoLocation[cell].locations;
+        		var turn = salvoLocation[cell].turn;
+        		var player = salvoLocation[cell].player;
+
+				$.each( salvoLocation2, function(cell) {
+					var cellLocation = $(".shipsGrid").find("#" + salvoLocation2[cell]);
+					if(gamePlayerValue.gp == player) {
+						$(".salvoesGrid").find("#" + salvoLocation2[cell]).addClass("hasSalvo").text(turn);
+					} else {
+						cellLocation.addClass("hasSalvo").text(turn);
+						if(cellLocation.hasClass("hasShip") && cellLocation.hasClass("hasSalvo")) {
+							cellLocation.addClass("hasHit");
+						}
+					}
+				});
+        	});
         });
     });
 };

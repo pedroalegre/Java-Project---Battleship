@@ -50,10 +50,11 @@ public class SalvoApplication {
 			GamePlayer gp5 = new GamePlayer(p4, g3);
 			GamePlayer gp6 = new GamePlayer(p1, g3);
 
+			gp1.addShip(s2);
 			gp1.addShip(s4);
-			gp1.addShip(s3);
+			gp1.addShip(s5);
 			gp2.addShip(s1);
-			gp2.addShip(s2);
+			gp2.addShip(s3);
 
 			List<String> sloc1 = Arrays.asList("A2", "C3", "B7");
 			List<String> sloc2 = Arrays.asList("G3", "F6", "H8");
