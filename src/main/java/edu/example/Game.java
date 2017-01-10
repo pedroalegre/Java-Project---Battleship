@@ -24,6 +24,9 @@ public class Game {
 	@OneToMany(mappedBy="game", fetch = FetchType.EAGER)
 	Set<GamePlayer> games;
 
+	@OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+	Set<GameScore> game;
+
 	public Game() {}
 
 	public Game(long time) {

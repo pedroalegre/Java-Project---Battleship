@@ -59,8 +59,6 @@ public class SalvoController {
 				.stream().map(ship -> makeShipsDTO(ship)).collect(Collectors.toList()));
 
 		gameViewMap.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().map(gp -> makeSalvoDTO(gp.getSalvoes())).collect(Collectors.toList()));
-		//gameViewMap.put("salvoes", gamePlayerRepository.findOne(gamePlayerId).salvoes
-		//		.stream().map(salvo -> makeSalvoesDTO(salvo)).collect(Collectors.toList()));
 
 		return gameViewMap;
 	}
@@ -101,15 +99,4 @@ public class SalvoController {
 
 		return shipsMap;
 	}
-
-	/*private Map<String, Object> makeSalvoesDTO(GamePlayer salvo) {
-		Map<String, Object> salvoesMap = new LinkedHashMap<>();
-
-		salvoesMap.put("turn", salvo.getTurn());
-		salvoesMap.put("player", salvo.getGamePlayer().getId());
-		salvoesMap.put("locations", salvo.getSalvoLocations());
-
-		return salvoesMap;
-	}
-	*/
 }

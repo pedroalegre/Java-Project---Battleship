@@ -18,7 +18,7 @@ public class SalvoApplication {
 
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository player, GameRepository game, GamePlayerRepository gamePlayer, ShipRepository ship, SalvoRepository salvo) {
+	public CommandLineRunner initData(PlayerRepository player, GameRepository game, GamePlayerRepository gamePlayer, ShipRepository ship, SalvoRepository salvo, GameScoreRepository score) {
 		return (args) -> {
 			Player p1 = new Player("j.bauer@ctu.gov");
 			Player p2 = new Player("c.hloe@ctu.gov");
@@ -101,6 +101,10 @@ public class SalvoApplication {
 			gp4.addSalvo(sal11);
 			gp4.addSalvo(sal12);
 
+			GameScore gs1 = new GameScore(p1, g1, 3600, 1);
+			GameScore gs2 = new GameScore(p2, g1, 3600, 0);
+			GameScore gs3 = new GameScore(p1, g1, 3600, 0.5);
+
 			// save a few of players
 			player.save(p1);
 			player.save(p2);
@@ -145,6 +149,11 @@ public class SalvoApplication {
 			salvo.save(sal10);
 			salvo.save(sal11);
 			salvo.save(sal12);
+
+			// save a few scores
+			score.save(gs1);
+			score.save(gs2);
+			score.save(gs3);
 
 		};
 	}
