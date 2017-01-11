@@ -51,4 +51,8 @@ public class GameScore {
 	public double getScore() {
 		return score;
 	}
+
+	public Game getGame() {
+		return game;
+	}
 }

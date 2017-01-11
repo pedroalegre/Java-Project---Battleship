@@ -102,8 +102,9 @@ public class SalvoApplication {
 			gp4.addSalvo(sal12);
 
 			GameScore gs1 = new GameScore(p1, g1, 3600, 1);
-			GameScore gs2 = new GameScore(p2, g1, 3600, 0);
-			GameScore gs3 = new GameScore(p1, g1, 3600, 0.5);
+			GameScore gs2 = new GameScore(p2, g1, 7200, 0);
+			GameScore gs3 = new GameScore(p2, g2, 9800, 0.5);
+			GameScore gs4 = new GameScore(p3, g2, 9800, 1);
 
 			// save a few of players
 			player.save(p1);
@@ -154,6 +155,7 @@ public class SalvoApplication {
 			score.save(gs1);
 			score.save(gs2);
 			score.save(gs3);
+			score.save(gs4);
 
 		};
 	}

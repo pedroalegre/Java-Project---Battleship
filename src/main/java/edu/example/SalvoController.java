@@ -41,6 +41,7 @@ public class SalvoController {
 
 		gpMap.put("id", gp.getId());
 		gpMap.put("player", gp.getPlayer());
+		if( gp.getGameScore() != null) { gpMap.put("score", gp.getGameScore().getScore()); }
 
 		return gpMap;
 	}

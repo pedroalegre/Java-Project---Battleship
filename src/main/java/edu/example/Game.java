@@ -21,11 +21,11 @@ public class Game {
 	private long id;
 	private Date creationDate;
 
-	@OneToMany(mappedBy="game", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
 	Set<GamePlayer> games;
 
 	@OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
-	Set<GameScore> game;
+	Set<GameScore> gameScores;
 
 	public Game() {}
 
@@ -46,4 +46,8 @@ public class Game {
 	}
 
 	public Set<GamePlayer> getGamePlayers() { return games; }
+
+	public Set<GameScore> getGame() {
+		return gameScores;
+	}
 }

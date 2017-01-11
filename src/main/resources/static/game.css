@@ -62,6 +62,6 @@
 
 @keyframes scan{
   0{top:-80px;}
-  70%{top:700px;}
-  100%{top:700px;}
+  70%{top:600px;}
+  100%{top:600px;}
 }

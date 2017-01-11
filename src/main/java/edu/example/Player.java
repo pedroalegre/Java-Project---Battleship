@@ -21,10 +21,10 @@ public class Player {
     private String userName;
 
     @OneToMany(mappedBy="player", fetch = FetchType.EAGER)
-    Set<GamePlayer> players;
+    Set<GamePlayer> gamePlayers;
 
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
-	Set<GameScore> gameScores;
+	Set<GameScore> gameScore;
 
     public Player() {}
 
@@ -43,4 +43,8 @@ public class Player {
     public void setUserName(String email) {
         this.userName = email;
     }
+
+	public GameScore getGameScore(Game game) {
+		return gameScore.stream().filter(gs -> gs.getGame().equals(game)).findFirst().orElse(null);
+	}
 }
