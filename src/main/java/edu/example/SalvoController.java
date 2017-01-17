@@ -1,6 +1,9 @@
 package edu.example;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,9 +24,37 @@ public class SalvoController {
 	@Autowired
 	private GamePlayerRepository gamePlayerRepository;
 
+	@Autowired
+	private PlayerRepository playerRepository;
+
 	@RequestMapping("/games")
-	public List<Object> getGame() {
-		return game.findAll().stream().map(game -> makeGameDTO(game)).collect(Collectors.toList());
+	public Map<String, Object> getGame(Authentication authentication) {
+		List<Player> players = playerRepository.findByUserName(authentication.getName());
+
+		Map<String, Object> makeDTO = new LinkedHashMap<>();
+		if(isGuest(authentication)) {
+			makeDTO.put("player", "Guest");
+		} else {
+			makeDTO.put("player", players.stream().map(p -> makePlayerDTO(p)).collect(Collectors.toList()));
+		}
+
+		makeDTO.put("games", game.findAll().stream().map(game -> makeGameDTO(game)).collect(Collectors.toList()));
+
+		return makeDTO;
+		//return game.findAll().stream().map(game -> makeGameDTO(game)).collect(Collectors.toList());
+	}
+
+	private Map<String, Object> makePlayerDTO(Player player) {
+		Map<String, Object> playerMap = new LinkedHashMap<>();
+
+		playerMap.put("id", player.getId());
+		playerMap.put("player", player.getUserName());
+
+		return playerMap;
+	}
+
+	private boolean isGuest(Authentication authentication) {
+		return authentication == null || authentication instanceof AnonymousAuthenticationToken;
 	}
 
 	private Map<String, Object> makeGameDTO(Game game) {
@@ -100,4 +131,13 @@ public class SalvoController {
 
 		return shipsMap;
 	}
+
+	/*
+	@Autowired
+	private PlayerRepository playerRepository;
+
+	public List<Player> getAll(Authentication authentication) {
+		return playerRepository.findByUserName("j.bauer@ctu.gov");
+	}
+	*/
 }
