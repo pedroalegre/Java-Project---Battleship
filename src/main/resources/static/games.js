@@ -1,22 +1,19 @@
 var leaderboardHeader = ["Name", "Total", "Won", "Lost", "Tied"];
-var names = [];
-var scores = {};
-var won = {};
-var lost = {};
-var tied = {};
-
-createHeader();
-getPlayerScores();
-
 
 function getPlayerScores() {
     var url = "api/games";
+    var names = [];
+    var scores = {};
+    var won = {};
+    var lost = {};
+    var tied = {};
 
     console.log( "ready!" );
 
     $.getJSON( url, function( games ) {
 
 		var playerList = [];
+		games = games.games;
 
 		//get the scores for the leaderboard
 		$.each( games, function(key) {
@@ -61,6 +58,8 @@ function getPlayerScores() {
 				}
 			});
 		});
+
+		$(".leaderboardBody").empty();
 
 		// replace the undefined scores with 0
         $.each(names, function(i) {
@@ -143,6 +142,7 @@ function getPlayerScores() {
 };
 
 function createHeader() {
+	$(".leaderboardHeader").empty();
     var row = $("<tr class='headerRow'></tr>");
     $.each(leaderboardHeader, function(i) {
     	row.append("<th class='columnHeader'>" + leaderboardHeader[i] + "</th>");
@@ -150,3 +150,61 @@ function createHeader() {
     $(".leaderboardHeader").append(row);
 };
 
+$(document).ready(function ($) {
+	$("#logoutform").hide();
+	$("#loginform").submit(function (event) {
+		event.preventDefault();
+		var data = "username=" + $("#username").val() + "&password=" + $("#password").val();
+		$.ajax({
+			data: data,
+			timeout: 1000,
+			type: 'POST',
+			url: '/api/login'
+
+		}).done(function(data, textStatus, jqXHR) {
+			createHeader();
+        	getPlayerScores();
+			alert("Welcome admiral!");
+			$("#loginform").hide();
+			$("#logoutform").show();
+			$("#leaderboard").show();
+			$("#signinform").hide();
+
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			alert("Stop hacking and put the right credentials!!");
+		});
+	});
+
+	$("#logoutform").submit(function (event) {
+		event.preventDefault();
+		$.ajax({
+			timeout: 1000,
+			type: 'POST',
+			url: '/api/logout'
+
+		}).done(function(data, textStatus, jqXHR) {
+			alert("Leaving so soon?");
+			$("#loginform").show();
+			$("#logoutform").hide();
+			$("#leaderboard").hide();
+			$("#signinform").show();
+		});
+	});
+
+	/*$("#signinform").submit(function (event) {
+		event.preventDefault();
+		var data = "username=" + $("#username").val() + "&password=" + $("#password").val();
+		$.ajax({
+			data: data,
+			timeout: 1000,
+			type: 'POST',
+			url: '/api/logout'
+
+		}).done(function(data, textStatus, jqXHR) {
+			alert("Leaving so soon?");
+			$("#loginform").show();
+			$("#logoutform").hide();
+			$("#leaderboard").hide();
+		});
+	});*/
+});

@@ -195,9 +195,9 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
 			@Override
 			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				List<Player> players = playerRepository.findByUserName(username);
-				if(!players.isEmpty()) {
-					Player player = players.get(0);
+				Player players = playerRepository.findByUserName(username);
+				if(players != null) {
+					Player player = players;
 					return new User(player.getUserName(), player.getPassword(),
 							AuthorityUtils.createAuthorityList("USER"));
 				} else {
@@ -216,6 +216,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+				.antMatchers("/api/players").permitAll()
 				.antMatchers("/api/**").authenticated()
 				//.antMatchers("/**").hasAuthority("USER")
 				.and()

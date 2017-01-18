@@ -7,7 +7,21 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
-    <table class="table table-bordered" id="leaderboard">
+	<form id="loginform" name="loginform">
+		<label for="username">Username: </label><input id="username" name="username"><br/>
+		<label for="password">Password:</label><input id="password" name="password"><br/>
+		<button type="submit">Login</button>
+	</form>
+
+	<form id="logoutform" name="logoutform">
+		<button>Log out</button>
+	</form>
+
+	<form id="signinform" name="signinform">
+		<button>Sign in</button>
+	</form>
+
+	<table class="table table-bordered" id="leaderboard">
         <thead class="leaderboardHeader"></thead>
         <tbody class="leaderboardBody"></tbody>
     </table>

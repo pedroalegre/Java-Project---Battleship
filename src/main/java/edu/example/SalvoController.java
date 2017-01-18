@@ -2,11 +2,12 @@ package edu.example;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,19 +30,17 @@ public class SalvoController {
 
 	@RequestMapping("/games")
 	public Map<String, Object> getGame(Authentication authentication) {
-		List<Player> players = playerRepository.findByUserName(authentication.getName());
+		Player players = playerRepository.findByUserName(authentication.getName());
 
 		Map<String, Object> makeDTO = new LinkedHashMap<>();
 		if(isGuest(authentication)) {
 			makeDTO.put("player", "Guest");
 		} else {
-			makeDTO.put("player", players.stream().map(p -> makePlayerDTO(p)).collect(Collectors.toList()));
+			makeDTO.put("player", makePlayerDTO(players));
 		}
-
 		makeDTO.put("games", game.findAll().stream().map(game -> makeGameDTO(game)).collect(Collectors.toList()));
 
 		return makeDTO;
-		//return game.findAll().stream().map(game -> makeGameDTO(game)).collect(Collectors.toList());
 	}
 
 	private Map<String, Object> makePlayerDTO(Player player) {
@@ -49,7 +48,6 @@ public class SalvoController {
 
 		playerMap.put("id", player.getId());
 		playerMap.put("player", player.getUserName());
-
 
 		return playerMap;
 	}
@@ -133,12 +131,24 @@ public class SalvoController {
 		return shipsMap;
 	}
 
-	/*
-	@Autowired
-	private PlayerRepository playerRepository;
+	@RequestMapping(path = "/players", method = RequestMethod.POST)
+	private ResponseEntity<Map<String, Object>> createUser(@RequestParam String userName, String password) {
+		if(userName.isEmpty()) {
+			return new ResponseEntity<>(makeMap("error", "No name given"), HttpStatus.FORBIDDEN);
+		}
 
-	public List<Player> getAll(Authentication authentication) {
-		return playerRepository.findByUserName("j.bauer@ctu.gov");
+		Player player = playerRepository.findByUserName(userName);
+		if(player != null) {
+			return new ResponseEntity<>(makeMap("error", "Already exists"), HttpStatus.CONFLICT);
+		}
+
+		player = playerRepository.save(new Player(userName, password));
+		return new ResponseEntity<>(makeMap("name", player.getUserName()), HttpStatus.CREATED);
 	}
-	*/
+
+	private Map<String, Object> makeMap(String key, Object value) {
+		Map<String, Object> map = new LinkedHashMap<>();
+		map.put(key, value);
+		return map;
+	}
 }
