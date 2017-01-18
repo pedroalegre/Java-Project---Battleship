@@ -153,26 +153,7 @@ function createHeader() {
 $(document).ready(function ($) {
 	$("#logoutform").hide();
 	$("#loginform").submit(function (event) {
-		event.preventDefault();
-		var data = "username=" + $("#username").val() + "&password=" + $("#password").val();
-		$.ajax({
-			data: data,
-			timeout: 1000,
-			type: 'POST',
-			url: '/api/login'
-
-		}).done(function(data, textStatus, jqXHR) {
-			createHeader();
-        	getPlayerScores();
-			alert("Welcome admiral!");
-			$("#loginform").hide();
-			$("#logoutform").show();
-			$("#leaderboard").show();
-			$("#signinform").hide();
-
-		}).fail(function(jqXHR, textStatus, errorThrown) {
-			alert("Stop hacking and put the right credentials!!");
-		});
+		loginUser();
 	});
 
 	$("#logoutform").submit(function (event) {
@@ -187,24 +168,53 @@ $(document).ready(function ($) {
 			$("#loginform").show();
 			$("#logoutform").hide();
 			$("#leaderboard").hide();
-			$("#signinform").show();
+			$("#signupform").show();
 		});
 	});
 
-	/*$("#signinform").submit(function (event) {
+	$("#signupform").submit(function (event) {
 		event.preventDefault();
-		var data = "username=" + $("#username").val() + "&password=" + $("#password").val();
+		var data = "userName=" + $("#username").val() + "&password=" + $("#password").val();
 		$.ajax({
 			data: data,
 			timeout: 1000,
 			type: 'POST',
-			url: '/api/logout'
+			url: '/api/players'
 
 		}).done(function(data, textStatus, jqXHR) {
-			alert("Leaving so soon?");
-			$("#loginform").show();
-			$("#logoutform").hide();
-			$("#leaderboard").hide();
+			loginUser();
+			$("#loginform").hide();
+			$("#logoutform").show();
+			$("#leaderboard").show();
+			$("#signupform").hide();
+
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			alert("Stop hacking and put the right credentials!!");
 		});
-	});*/
+	});
 });
+
+// login a user
+function loginUser() {
+	event.preventDefault();
+	var data = "username=" + $("#username").val() + "&password=" + $("#password").val();
+	$.ajax({
+		data: data,
+		timeout: 1000,
+		type: 'POST',
+		url: '/api/login'
+
+	}).done(function(data, textStatus, jqXHR) {
+		createHeader();
+		getPlayerScores();
+		alert("Welcome admiral!");
+		$("#loginform").hide();
+		$("#logoutform").show();
+		$("#leaderboard").show();
+		$("#signupform").hide();
+
+	})
+	.fail(function(jqXHR, textStatus, errorThrown) {
+		alert("Stop hacking and put the right credentials!!");
+	});
+}

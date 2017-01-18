@@ -105,3 +105,18 @@ function playersTitle() {
     $(".playerInfo").append("<div id=vs>");
     $(".playerInfo").append("<div id=player2>");
 }
+
+$(document).ready(function ($) {
+	$("#logoutform").submit(function (event) {
+		event.preventDefault();
+		$.ajax({
+			timeout: 1000,
+			type: 'POST',
+			url: '/api/logout'
+
+		}).done(function(data, textStatus, jqXHR) {
+			window.location.replace("/games.html");
+			alert("Leaving so soon?");
+		});
+	});
+});
