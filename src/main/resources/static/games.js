@@ -10,16 +10,47 @@ function getPlayerScores() {
 
     console.log( "ready!" );
 
+	// create the list of games
     $.getJSON( url, function( games ) {
+
+		var gamesList = [];
+
+		$.each( games.games, function( key, game ) {
+		console.log("Ahi va");
+
+			var url;
+			gamesList = [];
+
+			var gamePlayerList = game.players;
+			gamesList.push( "<li id='" + game.id + "'>" + new Date(game.created).toLocaleString());
+
+			$.each( gamePlayerList, function(key2) {
+				var player = gamePlayerList[key2];
+				gamesList.push(", " + player.name);
+
+				if(games.player.id == game.players[key2].id) {
+					url = "game.html?gp=" + game.players[key2].gpid;
+				}
+			});
+
+			gamesList.push("</li>");
+
+			if(url != undefined) {
+				$("#gameslist").append(gamesList.join( "" ));
+            	$("#gameslist").append("<a href=" + url + ">Join</a>");
+			} else {
+				$("#gameslist").append(gamesList.join( "" ));
+			}
+		});
 
 		var playerList = [];
 		games = games.games;
 
 		//get the scores for the leaderboard
 		$.each( games, function(key) {
-			$.each(games[key].GamePlayers, function(key2) {
-				var score = games[key].GamePlayers[key2].score;
-				var name = games[key].GamePlayers[key2].player.userName;
+			$.each(games[key].players, function(key2) {
+				var score = games[key].players[key2].score;
+				var name = games[key].players[key2].name;
 
 				if($.inArray(name, names) == -1) {
 					names.push(name);
@@ -169,6 +200,7 @@ $(document).ready(function ($) {
 			$("#logoutform").hide();
 			$("#leaderboard").hide();
 			$("#signupform").show();
+			$("#gameslist").hide();
 		});
 	});
 

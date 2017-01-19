@@ -61,7 +61,7 @@ public class SalvoController {
 
 		gamesMap.put("id", game.getId());
 		gamesMap.put("created", game.getCreationDate());
-		gamesMap.put("GamePlayers", game.games.stream().map(gp -> makeGamePlayerDTO(gp)).collect(Collectors.toList()));
+		gamesMap.put("players", game.games.stream().map(gp -> makeGamePlayerDTO(gp)).collect(Collectors.toList()));
 
 		return gamesMap;
 	}
@@ -69,29 +69,43 @@ public class SalvoController {
 	private Map<String, Object> makeGamePlayerDTO(GamePlayer gp) {
 		Map<String, Object> gpMap = new LinkedHashMap<>();
 
-		gpMap.put("id", gp.getId());
-		gpMap.put("player", gp.getPlayer());
+		gpMap.put("gpid", gp.getId());
+		gpMap.put("id", gp.getPlayer().getId());
+		gpMap.put("name", gp.getPlayer().getUserName());
 		if( gp.getGameScore() != null) { gpMap.put("score", gp.getGameScore().getScore()); }
 
 		return gpMap;
 	}
 
 	@RequestMapping("/game_view/{gamePlayerId}")
-	private Map<String, Object> getGameView(@PathVariable Long gamePlayerId) {
-		Map<String, Object> gameViewMap = new LinkedHashMap<>();
+	private Object getGameView(@PathVariable Long gamePlayerId, Authentication authentication) {
+
 		GamePlayer gamePlayer = gamePlayerRepository.findOne(gamePlayerId);
-		Set<GamePlayer> gamePlayers = gamePlayer.getGame().getGamePlayers();
+		String currentPlayer = gamePlayerRepository.findOne(gamePlayerId).getPlayer().getUserName();
 
-		gameViewMap.put("id", gamePlayer.getGame().getId());
-		gameViewMap.put("created", gamePlayer.getGame().getCreationDate());
-		gameViewMap.put("GamePlayers", gamePlayers.stream().map(gp -> makeGamePlayerGameViewDTO(gp)).collect(Collectors.toList()));
+		if(authentication.getName() != currentPlayer) {
+			return new ResponseEntity<>(makeMap("name", "Hello"), HttpStatus.UNAUTHORIZED);
+		} else {
+			Map<String, Object> gameViewMap = new LinkedHashMap<>();
+			Set<GamePlayer> gamePlayers = gamePlayer.getGame().getGamePlayers();
 
-		gameViewMap.put("ships", gamePlayer.getShips()
-				.stream().map(ship -> makeShipsDTO(ship)).collect(Collectors.toList()));
+			gameViewMap.put("id", gamePlayer.getGame().getId());
+			gameViewMap.put("created", gamePlayer
+					.getGame().getCreationDate());
+			gameViewMap.put("GamePlayers", gamePlayers
+					.stream().map(gp -> makeGamePlayerGameViewDTO(gp))
+					.collect(Collectors.toList()));
 
-		gameViewMap.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().map(gp -> makeSalvoDTO(gp.getSalvoes())).collect(Collectors.toList()));
+			gameViewMap.put("ships", gamePlayer.getShips()
+					.stream().map(ship -> makeShipsDTO(ship))
+					.collect(Collectors.toList()));
 
-		return gameViewMap;
+			gameViewMap.put("salvoes", gamePlayer.getGame().getGamePlayers()
+					.stream().map(gp -> makeSalvoDTO(gp.getSalvoes()))
+					.collect(Collectors.toList()));
+
+			return gameViewMap;
+		}
 	}
 
 	private List<Map<String,Object>> makeSalvoDTO(Set<Salvo> salvoes) {

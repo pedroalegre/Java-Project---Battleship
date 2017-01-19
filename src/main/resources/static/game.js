@@ -87,7 +87,9 @@ function drawShips (gamePlayerValue) {
 				});
         	});
         });
-    });
+	}).fail(function() {
+		window.location.replace("games.html");
+	});
 };
 
 function getGamePlayerPath(path) {
