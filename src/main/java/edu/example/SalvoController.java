@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class SalvoController {
 
 	@Autowired
-	private GameRepository game;
+	private GameRepository gameRepository;
 
 	@Autowired
 	private GamePlayerRepository gamePlayerRepository;
@@ -38,7 +38,7 @@ public class SalvoController {
 		} else {
 			makeDTO.put("player", makePlayerDTO(players));
 		}
-		makeDTO.put("games", game.findAll().stream().map(game -> makeGameDTO(game)).collect(Collectors.toList()));
+		makeDTO.put("games", gameRepository.findAll().stream().map(game -> makeGameDTO(game)).collect(Collectors.toList()));
 
 		return makeDTO;
 	}
@@ -164,5 +164,22 @@ public class SalvoController {
 		Map<String, Object> map = new LinkedHashMap<>();
 		map.put(key, value);
 		return map;
+	}
+
+	@RequestMapping(path = "/games", method = RequestMethod.POST)
+	private ResponseEntity<Map<String, Object>> createGame(Authentication authentication) {
+		Player player = playerRepository.findByUserName(authentication.getName());
+
+		if(authentication == null) {
+			return new ResponseEntity<>(makeMap("error", "You are not logged in"), HttpStatus.UNAUTHORIZED);
+		}
+
+		Game game = new Game(0);
+		gameRepository.save(game);
+
+		GamePlayer gamePlayer = new GamePlayer(player, game);
+		gamePlayerRepository.save(gamePlayer);
+
+		return new ResponseEntity<>(makeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
 	}
 }

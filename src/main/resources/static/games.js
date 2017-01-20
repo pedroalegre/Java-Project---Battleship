@@ -1,5 +1,68 @@
 var leaderboardHeader = ["Name", "Total", "Won", "Lost", "Tied"];
 
+$(document).ready(function ($) {
+	$("#logoutform").hide();
+	$("#loginform").submit(function (event) {
+		var loginMessage = "Welcome back, Admiral."
+		loginUser(loginMessage);
+	});
+
+	$("#logoutform").submit(function (event) {
+		event.preventDefault();
+		$.ajax({
+			timeout: 1000,
+			type: 'POST',
+			url: '/api/logout'
+
+		}).done(function(data, textStatus, jqXHR) {
+			alert("Leaving so soon?");
+			$("#loginform").show();
+			$("#logoutform").hide();
+			$("#leaderboard").hide();
+			$("#signupform").show();
+			$("#gameslist").hide();
+		});
+	});
+
+	$("#signupform").submit(function (event) {
+		event.preventDefault();
+		var data = "userName=" + $("#username").val() + "&password=" + $("#password").val();
+		$.ajax({
+			data: data,
+			timeout: 1000,
+			type: 'POST',
+			url: '/api/players'
+
+		}).done(function(data, textStatus, jqXHR) {
+			var signupMessage = "Sign up successful. Welcome to Battleship, Admiral.";
+			loginUser(signupMessage);
+			$("#loginform").hide();
+			$("#logoutform").show();
+			$("#leaderboard").show();
+			$("#signupform").hide();
+
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			alert("Stop hacking and put the right credentials!!");
+		});
+	});
+
+	$("#createGame").submit(function (event) {
+		event.preventDefault();
+		$.ajax({
+			timeout: 1000,
+			type: 'POST',
+			url: '/api/games'
+
+		}).done(function(data, textStatus, jqXHR) {
+			var gpid = jqXHR.responseJSON.gpid;
+			window.location.replace("game.html?gp=" + gpid);
+
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			alert("Error. You have to be logged in to create a new game");
+		});
+	});
+});
+
 function getPlayerScores() {
     var url = "api/games";
     var names = [];
@@ -181,53 +244,8 @@ function createHeader() {
     $(".leaderboardHeader").append(row);
 };
 
-$(document).ready(function ($) {
-	$("#logoutform").hide();
-	$("#loginform").submit(function (event) {
-		loginUser();
-	});
-
-	$("#logoutform").submit(function (event) {
-		event.preventDefault();
-		$.ajax({
-			timeout: 1000,
-			type: 'POST',
-			url: '/api/logout'
-
-		}).done(function(data, textStatus, jqXHR) {
-			alert("Leaving so soon?");
-			$("#loginform").show();
-			$("#logoutform").hide();
-			$("#leaderboard").hide();
-			$("#signupform").show();
-			$("#gameslist").hide();
-		});
-	});
-
-	$("#signupform").submit(function (event) {
-		event.preventDefault();
-		var data = "userName=" + $("#username").val() + "&password=" + $("#password").val();
-		$.ajax({
-			data: data,
-			timeout: 1000,
-			type: 'POST',
-			url: '/api/players'
-
-		}).done(function(data, textStatus, jqXHR) {
-			loginUser();
-			$("#loginform").hide();
-			$("#logoutform").show();
-			$("#leaderboard").show();
-			$("#signupform").hide();
-
-		}).fail(function(jqXHR, textStatus, errorThrown) {
-			alert("Stop hacking and put the right credentials!!");
-		});
-	});
-});
-
 // login a user
-function loginUser() {
+function loginUser(welcomeMessage) {
 	event.preventDefault();
 	var data = "username=" + $("#username").val() + "&password=" + $("#password").val();
 	$.ajax({
@@ -239,7 +257,7 @@ function loginUser() {
 	}).done(function(data, textStatus, jqXHR) {
 		createHeader();
 		getPlayerScores();
-		alert("Welcome admiral!");
+		alert(welcomeMessage);
 		$("#loginform").hide();
 		$("#logoutform").show();
 		$("#leaderboard").show();
