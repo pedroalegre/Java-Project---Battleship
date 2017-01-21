@@ -82,6 +82,7 @@ function getPlayerScores() {
 		console.log("Ahi va");
 
 			var url;
+			var gameId;
 			gamesList = [];
 
 			var gamePlayerList = game.players;
@@ -91,18 +92,58 @@ function getPlayerScores() {
 				var player = gamePlayerList[key2];
 				gamesList.push(", " + player.name);
 
+				if(gamePlayerList.length == 1) {
+					var joinButton = $('<button/>', {
+						text: 'Join game',
+						id: 'data-' + game.id,
+						class: 'btn btn-primary',
+						click: function() {
+							var url2 = 'api/game/' + game.id + '/players';
+							$.ajax({
+								timeout: 1000,
+								type: 'POST',
+								url: url2
+
+							}).done(function(data, textStatus, jqXHR) {
+								var gpDestination = jqXHR.responseJSON.gpid;
+								url = "game.html?gp=" + gpDestination;
+
+								window.location.replace(url);
+
+							}).fail(function(jqXHR, textStatus, errorThrown) {
+							console.log(url2);
+								alert('Error!');
+							});
+						}
+					});
+				}
+
 				if(games.player.id == game.players[key2].id) {
 					url = "game.html?gp=" + game.players[key2].gpid;
+				} else {
+					$("#gameslist").append(joinButton);
 				}
 			});
 
-			gamesList.push("</li>");
-
 			if(url != undefined) {
+				var playButton = $('<button/>', {
+					text: 'Play game',
+					id: 'data-p' + game.id,
+					class: 'btn btn-warning',
+					click: function() {
+						window.location.replace(url);
+					}
+				});
+
+				gamesList.push("</li>");
 				$("#gameslist").append(gamesList.join( "" ));
-            	$("#gameslist").append("<a href=" + url + ">Join</a>");
+				$("#gameslist").append(playButton);
 			} else {
-				$("#gameslist").append(gamesList.join( "" ));
+				if(gamePlayerList.length == 2) {
+					$("#gameslist").append(gamesList.join( "" ));
+				} else {
+					$("#data-" + game.id).before(gamesList.join(""));
+				}
 			}
 		});
 

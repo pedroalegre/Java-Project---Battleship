@@ -182,4 +182,29 @@ public class SalvoController {
 
 		return new ResponseEntity<>(makeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
 	}
+
+	@RequestMapping(path = "/game/{gameId}/players", method = RequestMethod.POST)
+	private ResponseEntity<Map<String, Object>> joinGame(@PathVariable Long gameId, Authentication authentication) {
+		if(authentication == null) {
+			return new ResponseEntity<>(makeMap("error", "You are not logged in"), HttpStatus.UNAUTHORIZED);
+		}
+
+		Player currentPlayer = playerRepository.findByUserName(authentication.getName());
+
+		if(gameId == null) {
+			return new ResponseEntity<>(makeMap("error", "There is no game"), HttpStatus.FORBIDDEN);
+		}
+
+		Game currentGame = gameRepository.findOne(gameId);
+
+		if(currentGame.getGamePlayers().size() == 2) {
+			return new ResponseEntity<>(makeMap("error", "Game is full"), HttpStatus.FORBIDDEN);
+		} else {
+			GamePlayer gamePlayer = new GamePlayer(currentPlayer, currentGame);
+			gamePlayerRepository.save(gamePlayer);
+
+			return new ResponseEntity<>(makeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
+		}
+	}
+
 }
