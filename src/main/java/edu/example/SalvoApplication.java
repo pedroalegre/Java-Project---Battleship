@@ -73,6 +73,7 @@ public class SalvoApplication {
 			GamePlayer gp4 = new GamePlayer(p3, g2);
 			GamePlayer gp5 = new GamePlayer(p4, g3);
 			GamePlayer gp6 = new GamePlayer(p1, g3);
+			GamePlayer gp7 = new GamePlayer(p3, g4);
 
 			gp1.addShip(s2);
 			gp1.addShip(s4);
@@ -142,6 +143,7 @@ public class SalvoApplication {
 			gamePlayer.save(gp4);
 			gamePlayer.save(gp5);
 			gamePlayer.save(gp6);
+			gamePlayer.save(gp7);
 
 			// save a few ships
 			ship.save(s1);

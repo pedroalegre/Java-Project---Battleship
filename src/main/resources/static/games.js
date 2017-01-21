@@ -125,6 +125,8 @@ function getPlayerScores() {
 				}
 			});
 
+			gamesList.push("</li>");
+
 			if(url != undefined) {
 				var playButton = $('<button/>', {
 					text: 'Play game',
@@ -135,7 +137,6 @@ function getPlayerScores() {
 					}
 				});
 
-				gamesList.push("</li>");
 				$("#gameslist").append(gamesList.join( "" ));
 				$("#gameslist").append(playButton);
 			} else {
