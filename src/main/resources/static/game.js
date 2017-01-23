@@ -121,4 +121,21 @@ $(document).ready(function ($) {
 			alert("Leaving so soon?");
 		});
 	});
+
+	$("#addShips").submit(function (event) {
+		event.preventDefault();
+		$.post( {
+			url: "/api/games/players/" + getGamePlayerPath(location.search).gp + "/ships",
+			data: JSON.stringify([{shipType: "destroyer", shipLocations: ["A1", "B1", "C1"]}]),
+			contentType: "application/json",
+
+		}).done(function(data, textStatus, jqXHR) {
+			window.location.reload();
+			console.log("fucking master!");
+
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			console.log("shit!");
+		});
+	})
+
 });
