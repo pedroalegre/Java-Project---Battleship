@@ -47,6 +47,16 @@
 	background: red;
 }
 
+.shipsList {
+	list-style: none;
+	padding: 0;
+}
+
+.shipBlock {
+	background: #7ff12a;
+	height: 40px;
+}
+
 .scan {
     width: 484px;
     height: 80px;

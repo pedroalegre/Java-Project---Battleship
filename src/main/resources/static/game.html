@@ -38,16 +38,23 @@
 				<div class="scan"></div>
 			</table>
 		</div>
+		<div class="placeShips">
+			<form id="addShips" name="addShips">
+				<button id="addShipsButton">Place Ships</button>
+				<button id="confirmButton">Confirm</button>
+				<button id="cancelButton">Cancel</button>
+			</form>
+			<form id="positionButton">
+				<input type="radio" name="position" value="horizontal" checked> Horizontal
+				<input type="radio" name="position" value="vertical"> Vertical
+			</form>
+		</div>
+		<form id="logoutform" name="logoutform">
+			<button>Log out</button>
+		</form>
 	</div>
-	<form id="logoutform" name="logoutform">
-		<button>Log out</button>
-	</form>
-	<form id="addShips" name="addShips">
-		<button>Add Ships</button>
-	</form>
 
 	<script src="https://code.jquery.com/jquery-2.2.0.js"></script>
 	<script src="game.js"></script>
-
 </body>
 </html>
