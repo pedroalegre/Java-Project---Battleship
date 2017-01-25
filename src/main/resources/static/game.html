@@ -1,60 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Ship Locations</title>
-	<link rel="stylesheet" href="game.css">
-</head>
-<body>
-	<div class="grids">
-		<div class="shipsGrid">
-			<h1>Ship Locations!</h1>
-			<div class="playerInfo">
+	<head>
+		<meta charset="UTF-8">
+		<title>Ship Locations</title>
+		<link rel="stylesheet" href="game.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	</head>
+	<body>
+		<div class="grids">
+			<div class="shipsGrid">
+				<h1>Ship Locations!</h1>
+				<div class="playerInfo">
 
+				</div>
+				<table class="grid">
+					<thead class="header">
+
+					</thead>
+					<tbody class="rows">
+
+					</tbody>
+					<div class="scan"></div>
+				</table>
 			</div>
-			<table class="grid">
-				<thead class="header">
 
-				</thead>
-				<tbody class="rows">
+			<div class="salvoesGrid">
+				<h1>Salvoes Locations!</h1>
+				<div class="playerInfo">
 
-				</tbody>
-				<div class="scan"></div>
-			</table>
-		</div>
+				</div>
+				<table class="grid">
+					<thead class="header">
 
-		<div class="salvoesGrid">
-			<h1>Salvoes Locations!</h1>
-			<div class="playerInfo">
+					</thead>
+					<tbody class="rows">
 
+					</tbody>
+					<div class="scan"></div>
+				</table>
 			</div>
-			<table class="grid">
-				<thead class="header">
-
-				</thead>
-				<tbody class="rows">
-
-				</tbody>
-				<div class="scan"></div>
-			</table>
-		</div>
-		<div class="placeShips">
-			<form id="addShips" name="addShips">
-				<button id="addShipsButton">Place Ships</button>
-				<button id="confirmButton">Confirm</button>
-				<button id="cancelButton">Cancel</button>
-			</form>
-			<form id="positionButton">
-				<input type="radio" name="position" value="horizontal" checked> Horizontal
-				<input type="radio" name="position" value="vertical"> Vertical
+			<div class="placeShips">
+				<form id="addShips" name="addShips">
+					<button id="addShipsButton">Place Ships</button>
+					<button id="confirmButton">Confirm</button>
+					<button id="cancelButton">Cancel</button>
+				</form>
+				<form id="positionButton">
+					<input type="radio" name="position" value="horizontal" checked> Horizontal
+					<input type="radio" name="position" value="vertical"> Vertical
+				</form>
+			</div>
+			<form id="logoutform" name="logoutform">
+				<button>Log out</button>
 			</form>
 		</div>
-		<form id="logoutform" name="logoutform">
-			<button>Log out</button>
-		</form>
-	</div>
 
-	<script src="https://code.jquery.com/jquery-2.2.0.js"></script>
-	<script src="game.js"></script>
-</body>
+		<script src="https://code.jquery.com/jquery-2.2.0.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="game.js"></script>
+	</body>
 </html>

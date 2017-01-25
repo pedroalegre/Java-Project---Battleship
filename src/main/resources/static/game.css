@@ -57,6 +57,10 @@
 	height: 40px;
 }
 
+.shipPlaced {
+	background: #8b9287;
+}
+
 .scan {
     width: 484px;
     height: 80px;

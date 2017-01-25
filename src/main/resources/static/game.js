@@ -26,11 +26,6 @@ var ships = [{
 $(document).ready(function ($) {
 	drawGrid();
 
-	// get the cellId on mouseover
-    /*$('.cell').mouseup(function() {
-       console.log(this.id);
-    });*/
-
 	$("#logoutform").submit(function (event) {
 		event.preventDefault();
 		$.ajax({
@@ -70,7 +65,6 @@ $(document).ready(function ($) {
 			window.location.reload();
 
 		}).fail(function(jqXHR, textStatus, errorThrown) {
-			console.log("shit!");
 			window.location.reload();
 		});
 	})
@@ -221,6 +215,7 @@ function drop(event) {
 	var number = Number(cellId.substr(1,2));
 	var shipTemp = [];
 	var letters;
+	var paintShip = "";
 
 	$.each(ships, function(i) {
 		if(ships[i].shipType == shipType) {
@@ -228,37 +223,70 @@ function drop(event) {
 		}
 	});
 
+	// Horizontal ships
+	if($('input[name=position]:checked').val() == "horizontal") {
+		paintShip = "no";
+		horizontalShip(number, letter, shipLength, shipTemp, shipType);
+
+	// Vertical ships
+	} else {
+		paintShip = "no";
+		verticalShip(number, letter, shipLength, shipTemp, shipType);
+	}
+}
+
+function horizontalShip(number, letter, shipLength, shipTemp, shipType) {
 	for(i = 0; i < shipLength; i++) {
-
-		// Horizontal ships
-		if($('input[name=position]:checked').val() == "horizontal") {
-			horizontalShip(number, letter, shipLength, shipTemp);
-
-		// Vertical ships
+		if(((number - 1 + shipLength) > 10) || ($("#" + (letter + (number + i))).hasClass("hasShip"))) {
+			paintShip = "no";
 		} else {
-			verticalShip(number, letter, shipLength, shipTemp);
+			shipTemp.push(letter + (number + i));
+			paintShip = "yes";
 		}
 	}
-}
 
-function horizontalShip(number, letter, shipLength, shipTemp) {
-	if(number + shipLength > 10) {
-	} else {
-		shipTemp.push(letter + (number + i));
-		$("#" + (letter + (number + i))).addClass("hasShip");
+	if(paintShip == "yes") {
+		for(i = 0; i < shipLength; i++) {
+			$("#" + (letter + (number + i))).addClass("hasShip");
+		}
 	}
+	// Put the ship locations in the ships list
+	addShipLocations(shipType, shipTemp, shipLength);
 }
 
-function verticalShip(number, letter, shipLength, shipTemp) {
+function verticalShip(number, letter, shipLength, shipTemp, shipType) {
 	letters = rowHeader.indexOf(letter);
 
-	if(letters + shipLength > 10) {
-	} else {
-		shipTemp.push(rowHeader[letters + i] + number);
-		$("#" + (rowHeader[letters + i] + number)).addClass("hasShip");
+	for(i = 0; i < shipLength; i++) {
+		if(letters + shipLength > 10) {
+			paintShip = "no";
+			break;
+		} else if($("#" + (rowHeader[letters + i] + number)).hasClass("hasShip")) {
+			paintShip = "no";
+			break;
+		} else {
+			shipTemp.push(rowHeader[letters + i] + number);
+			paintShip = "yes";
+		}
 	}
+
+	if(paintShip == "yes") {
+		for(i = 0; i < shipLength; i++) {
+			$("#" + (rowHeader[letters + i] + number)).addClass("hasShip");
+		}
+	}
+	// Put the ship locations in the ships list
+	addShipLocations(shipType, shipTemp, shipLength);
 }
 
-function hasShip() {
+// Put the ship locations in the ships list
+function addShipLocations(shipType, shipTemp, shipLength) {
+	$.each(ships, function(i) {
+		if(ships[i].shipType == shipType) {
+			for(j = 0; j < shipLength; j++) {
+				(ships[i].shipLocations).push(shipTemp[j]);
+			}
 
+		}
+	});
 }
