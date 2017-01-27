@@ -80,4 +80,16 @@ public class GamePlayer {
 	public GameScore getGameScore() {
 		return player.getGameScore(this.game);
 	}
+
+	public long getLastTurn() {
+		if (!this.getSalvoes().isEmpty()) {
+			return this.getSalvoes()
+					.stream()
+					.map(s -> s.getTurn())
+					.max((x, y) -> Long.compare(x, y)).get();
+
+		} else {
+			return 0;
+		}
+	}
 }

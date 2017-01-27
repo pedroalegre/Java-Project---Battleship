@@ -22,9 +22,14 @@ var ships = [{
 		"length": 2,
 		"shipLocations": []
 }];
+var salvoes = [];
 
 $(document).ready(function ($) {
 	drawGrid();
+
+	$("#leaderboard").on("click", function() {
+		window.location.replace("games.html");
+	});
 
 	$("#logoutform").submit(function (event) {
 		event.preventDefault();
@@ -40,7 +45,7 @@ $(document).ready(function ($) {
 	});
 
 	$("#confirmButton").hide();
-	$("#cancelButton").hide();
+	$("#cancelShipsButton").hide();
 	$("#positionButton").hide();
 
 	$("#addShipsButton").on("click", function(event) {
@@ -48,35 +53,75 @@ $(document).ready(function ($) {
 		$(".salvoesGrid").hide();
 		$("#addShipsButton").hide();
 		$("#confirmButton").show();
-		$("#cancelButton").show();
+		$("#cancelShipsButton").show();
 		$("#positionButton").show();
 		addShips();
 	})
 	// Add ships to the repository and grid
 	$("#confirmButton").on("click", function(event) {
 		event.preventDefault();
-		$.post( {
-			url: "/api/games/players/" + getGamePlayerPath(location.search).gp + "/ships",
-			data: JSON.stringify(ships),
-			contentType: "application/json",
 
-		}).done(function(data, textStatus, jqXHR) {
-			$(".salvoesGrid").show();
-			window.location.reload();
-
-		}).fail(function(jqXHR, textStatus, errorThrown) {
-			window.location.reload();
-		});
+		if(validateShipsPlaced()) {
+			paintShips();
+		} else {
+			alert("Please place all ships");
+		}
 	})
 
-	$("#cancelButton").on("click", function(event) {
+	$("#cancelShipsButton").on("click", function(event) {
 		event.preventDefault();
+		ships = [{
+                		"shipType": "Carrier",
+                		"length": 5,
+                		"shipLocations": []
+                	}, {
+                		"shipType": "Battleship",
+                		"length": 4,
+                		"shipLocations": []
+                	}, {
+                		"shipType": "Submarine",
+                		"length": 3,
+                		"shipLocations": []
+                	}, {
+                		"shipType": "Destroyer",
+                		"length": 3,
+                		"shipLocations": []
+                	}, {
+                		"shipType": "PatrolBoat",
+                		"length": 2,
+                		"shipLocations": []
+                }];
+		paintShips();
 		$(".salvoesGrid").show();
 		$("#addShipsButton").show();
-		$(".shipsList").hide();
-		$("#confirmButton").hide();
-		$("#cancelButton").hide();
-		$("#positionButton").hide();
+		$(".placeShips").hide();
+		$(".shipsGrid .cell").removeClass("hasShip");
+	})
+
+	$("#fireSalvoesButton").hide();
+	$("#cancelSalvoesButton").hide();
+
+	$("#placeSalvoesButton").on("click", function(event) {
+		event.preventDefault();
+		$("#placeSalvoesButton").hide();
+		$("#fireSalvoesButton").show();
+		$("#cancelSalvoesButton").show();
+		placeSalvo();
+	})
+
+	$("#fireSalvoesButton").on("click", function(event) {
+		event.preventDefault();
+		paintSalvoes();
+	})
+
+	$("#cancelSalvoesButton").on("click", function(event) {
+		event.preventDefault();
+		removeSalvo();
+		salvoes = [];
+		$(".salvoesGrid .cell").off();
+		$("#fireSalvoesButton").hide();
+		$("#cancelSalvoesButton").hide();
+		$("#placeSalvoesButton").show();
 	})
 });
 
@@ -117,6 +162,7 @@ function createRow() {
     });
 }
 
+// Draw the players, ships and salvoes
 function drawShips (gamePlayerValue) {
     var url = "api/game_view/" + gamePlayerValue.gp;
 	var playerId = 0;
@@ -186,6 +232,7 @@ function playersTitle() {
     $(".playerInfo").append("<div id=player2>");
 }
 
+// Put the ship types in the place ships container
 function addShips() {
 	$(".shipsList").empty();
 	var shipsList = $("<ul class=shipsList></ul>");
@@ -205,7 +252,7 @@ function drag(event) {
 	event.dataTransfer.setData("shipType", event.target.id);
 }
 
-// Paint the ships on the grid
+// Paint the dropped ship on the grid
 function drop(event) {
 	event.preventDefault();
 	var shipType = event.dataTransfer.getData("shipType");
@@ -235,6 +282,7 @@ function drop(event) {
 	}
 }
 
+// Horizontal ships
 function horizontalShip(number, letter, shipLength, shipTemp, shipType) {
 	for(i = 0; i < shipLength; i++) {
 		if(((number - 1 + shipLength) > 10) || ($("#" + (letter + (number + i))).hasClass("hasShip"))) {
@@ -248,12 +296,14 @@ function horizontalShip(number, letter, shipLength, shipTemp, shipType) {
 	if(paintShip == "yes") {
 		for(i = 0; i < shipLength; i++) {
 			$("#" + (letter + (number + i))).addClass("hasShip");
+			$("#" + shipType).removeAttr("draggable").removeClass("shipBlock").addClass("shipPlaced");
 		}
 	}
 	// Put the ship locations in the ships list
 	addShipLocations(shipType, shipTemp, shipLength);
 }
 
+// Vertical ships
 function verticalShip(number, letter, shipLength, shipTemp, shipType) {
 	letters = rowHeader.indexOf(letter);
 
@@ -273,6 +323,7 @@ function verticalShip(number, letter, shipLength, shipTemp, shipType) {
 	if(paintShip == "yes") {
 		for(i = 0; i < shipLength; i++) {
 			$("#" + (rowHeader[letters + i] + number)).addClass("hasShip");
+			$("#" + shipType).removeAttr("draggable").removeClass("shipBlock").addClass("shipPlaced");
 		}
 	}
 	// Put the ship locations in the ships list
@@ -286,7 +337,83 @@ function addShipLocations(shipType, shipTemp, shipLength) {
 			for(j = 0; j < shipLength; j++) {
 				(ships[i].shipLocations).push(shipTemp[j]);
 			}
-
 		}
 	});
 }
+
+// validate if all ships are placed (returns boolean)
+function validateShipsPlaced() {
+	return !($(".shipsList li").hasClass("shipBlock"));
+}
+
+// Paint the ships in the grid
+function paintShips() {
+	$.post( {
+		url: "/api/games/players/" + getGamePlayerPath(location.search).gp + "/ships",
+		data: JSON.stringify(ships),
+		contentType: "application/json",
+
+	}).done(function(data, textStatus, jqXHR) {
+		$(".shipsGrid").hide().show();
+		$(".salvoesGrid").show();
+		$(".placeShips").hide();
+		$(".shipsList").hide();
+		//window.location.reload();
+
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		window.location.reload();
+	});
+}
+
+function paintSalvoes() {
+	$.post( {
+		url: "/api/games/players/" + getGamePlayerPath(location.search).gp + "/salvoes",
+		contentType: "application/json",
+		data: JSON.stringify({"salvoLocations": salvoes})
+
+	}).done(function(data, textStatus, jqXHR) {
+		console.log("success");
+		window.location.reload();
+
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(jqXHR);
+		window.location.reload();
+	});
+}
+
+function shoot() {
+
+	}
+function placeSalvo() {
+console.log(salvoes.length);
+	$(".salvoesGrid .cell").on("click", function(event) {
+		if(salvoes.length == 3) {
+			alert("You can't fire more than 3 shots per turn");
+			$(".salvoesGrid .cell").off();
+		} else if ($(".salvoesGrid #" + event.target.id).hasClass("hasSalvo")) {
+			alert("You've already fired at this location");
+		} else {
+			salvoes.push(event.target.id);
+			$(".salvoesGrid #" + event.target.id).addClass("hasSalvo");
+		}
+	})
+
+}
+
+function removeSalvo() {
+	for(i = 0; i < salvoes.length; i++) {
+		$("#" + salvoes[i]).removeClass("hasSalvo");
+		window.location.reload();
+	}
+
+}
+
+/*
+function hasShips() {
+	if($(".shipsGrid #A5").hasClass("hasShip")) {
+		$(".placeShips").hide();
+
+	}
+	console.log($(".shipsGrid .hasShip").hasClass("hasShip"));
+	console.log($("#A5"));
+}*/

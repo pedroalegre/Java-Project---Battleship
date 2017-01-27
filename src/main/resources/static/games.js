@@ -2,6 +2,7 @@ var leaderboardHeader = ["Name", "Total", "Won", "Lost", "Tied"];
 
 $(document).ready(function ($) {
 	$("#logoutform").hide();
+	$("#createGame").hide();
 	$("#loginform").submit(function (event) {
 		var loginMessage = "Welcome back, Admiral."
 		loginUser(loginMessage);
@@ -304,6 +305,7 @@ function loginUser(welcomeMessage) {
 		$("#logoutform").show();
 		$("#leaderboard").show();
 		$("#signupform").hide();
+		$("#createGame").show();
 
 	})
 	.fail(function(jqXHR, textStatus, errorThrown) {

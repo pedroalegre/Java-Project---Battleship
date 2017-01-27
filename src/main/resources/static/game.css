@@ -5,7 +5,7 @@
 
 .grid {
     border-collapse: collapse;
-    width: 484px;
+    width: 450px;
 }
 
 .cell {
@@ -28,7 +28,7 @@
 }
 
 .playerInfo {
-    width: 484px;
+    width: 450px;
     display: flex;
     flex-direction; row;
     justify-content: space-between;
@@ -59,10 +59,11 @@
 
 .shipPlaced {
 	background: #8b9287;
+	height: 40px;
 }
 
 .scan {
-    width: 484px;
+    width: 450px;
     height: 80px;
     background: linear-gradient(rgba(0,0,0,0),#7ff12a);
     position: absolute;

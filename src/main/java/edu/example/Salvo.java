@@ -36,6 +36,10 @@ public class Salvo {
 		return turn;
 	}
 
+	public void setTurn(long turn) {
+		this.turn = turn;
+	}
+
 	public GamePlayer getGamePlayer() { return gamePlayer; }
 
 	public void setGamePlayer(GamePlayer gamePlayer) { this.gamePlayer = gamePlayer; }
