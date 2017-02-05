@@ -13,6 +13,7 @@ public class GamePlayer {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private Date creationDate;
+	private boolean first;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="player_id")
@@ -91,5 +92,13 @@ public class GamePlayer {
 		} else {
 			return 0;
 		}
+	}
+
+	public boolean isFirst() {
+		return first;
+	}
+
+	public void setFirst(boolean first) {
+		this.first = first;
 	}
 }

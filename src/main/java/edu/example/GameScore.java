@@ -27,7 +27,7 @@ public class GameScore {
 
 	public GameScore() {}
 
-	public GameScore(Player player, Game game, long time, double score) {
+	public GameScore(Player player, Game game, long time, double score, Date finishDate) {
 		this.game = game;
 		this.player = player;
 		this.finishDate = new Date();

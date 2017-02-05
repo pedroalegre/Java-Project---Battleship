@@ -39,30 +39,41 @@
 					<div class="scan"></div>
 				</table>
 			</div>
-			<div class="placeShips">
-				<form id="addShips" name="addShips">
-					<button id="addShipsButton">Place Ships</button>
-					<button id="confirmButton">Confirm</button>
-					<button id="cancelShipsButton">Cancel</button>
+			<div class="buttonsBoard">
+				<div class="placeShips">
+					<form id="addShips" name="addShips">
+						<button id="addShipsButton">Place Ships</button>
+						<button id="confirmButton">Confirm</button>
+						<button id="cancelShipsButton">Cancel</button>
+					</form>
+					<form id="positionButton">
+						<input type="radio" name="position" value="horizontal" checked> Horizontal
+						<input type="radio" name="position" value="vertical"> Vertical
+					</form>
+				</div>
+				<div class="addSalvoes">
+					<div id="salvoButtons">
+						<button id="placeSalvoesButton">Place Salvoes</button>
+						<button id="fireSalvoesButton">Fire Salvoes</button>
+						<button id="cancelSalvoesButton">Cancel</button>
+					</div>
+				</div>
+				<form id="leaderboard" name="leaderboard">
+					<button>Leaderboard</button>
 				</form>
-				<form id="positionButton">
-					<input type="radio" name="position" value="horizontal" checked> Horizontal
-					<input type="radio" name="position" value="vertical"> Vertical
+				<form id="logoutform" name="logoutform">
+					<button>Log out</button>
 				</form>
+				<table class="table table-bordered" id="hitsBoard">
+					<thead class="hitsBoardHeader">
+
+					</thead>
+					<tbody class="hitsBoardBody">
+
+					</tbody>
+				</table>
 			</div>
-			<div class="addSalvoes">
-				<form id="salvoButtons">
-					<button id="placeSalvoesButton">Place Salvoes</button>
-					<button id="fireSalvoesButton">Fire Salvoes</button>
-					<button id="cancelSalvoesButton">Cancel</button>
-				</form>
-			</div>
-			<form id="leaderboard" name="leaderboard">
-				<button>Leaderboard</button>
-			</form>
-			<form id="logoutform" name="logoutform">
-				<button>Log out</button>
-			</form>
+
 		</div>
 
 		<script src="https://code.jquery.com/jquery-2.2.0.js"></script>

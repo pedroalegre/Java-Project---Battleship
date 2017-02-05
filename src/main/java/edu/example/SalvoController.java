@@ -33,6 +33,9 @@ public class SalvoController {
 	@Autowired
 	private SalvoRepository salvoRepository;
 
+	@Autowired
+	private GameScoreRepository gameScoreRepository;
+
 	@RequestMapping("/games")
 	public Map<String, Object> getGame(Authentication authentication) {
 		Player players = playerRepository.findByUserName(authentication.getName());
@@ -97,6 +100,7 @@ public class SalvoController {
 			gameViewMap.put("id", gamePlayer.getGame().getId());
 			gameViewMap.put("created", gamePlayer
 					.getGame().getCreationDate());
+			gameViewMap.put("gameStatus", gameStatus(gamePlayer));
 			gameViewMap.put("GamePlayers", gamePlayers
 					.stream().map(gp -> makeGamePlayerGameViewDTO(gp))
 					.collect(Collectors.toList()));
@@ -104,6 +108,12 @@ public class SalvoController {
 			gameViewMap.put("ships", gamePlayer.getShips()
 					.stream().map(ship -> makeShipsDTO(ship))
 					.collect(Collectors.toList()));
+
+			if(getEnemyPlayer(gamePlayer) != null) {
+				gameViewMap.put("enemyShips", getEnemyPlayer(gamePlayer).getShips()
+						.stream().map(ship -> makeEnemyShipsDTO(ship))
+						.collect(Collectors.toList()));
+			}
 
 			gameViewMap.put("salvoes", gamePlayer.getGame().getGamePlayers()
 					.stream().map(gp -> makeSalvoDTO(gp.getSalvoes()))
@@ -122,6 +132,7 @@ public class SalvoController {
 			salvoMap.put("turn", s.getTurn());
 			salvoMap.put("player", s.getGamePlayer().getPlayer().getId());
 			salvoMap.put("locations", s.getSalvoLocations());
+			salvoMap.put("hits", makeHitsDTO(s));
 			result.add(salvoMap);
 		});
 
@@ -142,8 +153,83 @@ public class SalvoController {
 
 		shipsMap.put("type", ship.getShipType());
 		shipsMap.put("locations", ship.getShipLocations());
+		shipsMap.put("sunk", ship.isSunk());
 
 		return shipsMap;
+	}
+
+	private Map<String, Object> makeEnemyShipsDTO(Ship ship) {
+		Map<String, Object> shipsMap = new LinkedHashMap<>();
+
+		shipsMap.put("type", ship.getShipType());
+		shipsMap.put("sunk", ship.isSunk());
+
+		return shipsMap;
+	}
+
+	private List<String> makeHitsDTO(Salvo salvo) {
+		GamePlayer enemyPlayer = getEnemyPlayer(salvo.getGamePlayer());
+
+		if(enemyPlayer != null) {
+			List<String> salvoLocations = salvo.getSalvoLocations();
+			List<String> shipLocations = getShipLocations(enemyPlayer);
+
+			return salvoLocations.stream()
+					.filter(s -> shipLocations.contains(s))
+					.collect(Collectors.toList());
+		} else return null;
+
+	}
+
+	private GamePlayer getEnemyPlayer(GamePlayer gamePlayer) {
+		Long playerId = gamePlayer.getId();
+		Game game = gamePlayer.getGame();
+		Set<GamePlayer> gamePlayers = game.getGamePlayers();
+
+		GamePlayer enemyPlayer = gamePlayers.stream()
+				.filter(gp -> gp.getId() != playerId ).findAny().orElse(null);
+
+		return enemyPlayer;
+	}
+
+	private List<String> getShipLocations(GamePlayer gamePlayer) {
+		Set<Ship> ships = gamePlayer.getShips();
+
+		return ships.stream().map(s -> s.getShipLocations())
+				.flatMap(cellId -> cellId.stream())
+				.collect(Collectors.toList());
+	}
+
+	private void sinkShip (GamePlayer gamePlayer) {
+		GamePlayer enemyPlayer = getEnemyPlayer(gamePlayer);
+
+		if(enemyPlayer != null) {
+			Set<Ship> enemyShips = enemyPlayer.getShips();
+			List<String> playerSalvoes = getSalvoLocations(gamePlayer);
+
+			enemyShips.stream().filter(ship -> !ship.isSunk())
+					.forEach(ship -> {
+						if(shipIsSunk(playerSalvoes, ship)) {
+							ship.setSunk(true);
+							shipRepository.save(ship);
+						}
+			});
+		}
+	}
+
+	private List<String> getSalvoLocations(GamePlayer gamePlayer) {
+		Set<Salvo> salvoes = gamePlayer.getSalvoes();
+
+		return salvoes.stream().map(s -> s.getSalvoLocations())
+				.flatMap(cellId -> cellId.stream())
+				.collect(Collectors.toList());
+	}
+
+	private boolean shipIsSunk(List<String> playerSalvoes, Ship ship) {
+		boolean shipIsSunk = ship.getShipLocations().stream()
+				.allMatch(location -> playerSalvoes.contains(location));
+
+		return shipIsSunk;
 	}
 
 	@RequestMapping(path = "/players", method = RequestMethod.POST)
@@ -171,17 +257,17 @@ public class SalvoController {
 	private ResponseEntity<Map<String, Object>> createGame(Authentication authentication) {
 		Player player = playerRepository.findByUserName(authentication.getName());
 
-		if(authentication == null) {
+		if(isGuest(authentication)) {
 			return new ResponseEntity<>(makeMap("error", "You are not logged in"), HttpStatus.UNAUTHORIZED);
+		} else {
+			Game game = new Game(0);
+			gameRepository.save(game);
+
+			GamePlayer gamePlayer = new GamePlayer(player, game);
+			gamePlayerRepository.save(gamePlayer);
+
+			return new ResponseEntity<>(makeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
 		}
-
-		Game game = new Game(0);
-		gameRepository.save(game);
-
-		GamePlayer gamePlayer = new GamePlayer(player, game);
-		gamePlayerRepository.save(gamePlayer);
-
-		return new ResponseEntity<>(makeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(path = "/game/{gameId}/players", method = RequestMethod.POST)
@@ -257,8 +343,9 @@ public class SalvoController {
 
 		if(!isGuest(authentication)) {
 			salvo.setTurn(currentGamePlayer.getLastTurn() + 1);
-			salvo.setGamePlayer(currentGamePlayer);
+			currentGamePlayer.addSalvo(salvo);
 			salvoRepository.save(salvo);
+			sinkShip(currentGamePlayer);
 
 			return new ResponseEntity(HttpStatus.CREATED);
 		} else {
@@ -266,4 +353,82 @@ public class SalvoController {
 		}
 	}
 
+	@RequestMapping(path = "/{gamePlayerId}/winner", method = RequestMethod.POST)
+	private ResponseEntity<Map<String, Object>> winner(@PathVariable Long gamePlayerId) {
+
+		GamePlayer currentGamePlayer = gamePlayerRepository.findOne(gamePlayerId);
+		Game game = currentGamePlayer.getGame();
+		setGameOver(game);
+
+		if(allShipsSunk(currentGamePlayer)) {
+			return new ResponseEntity<>(makeMap("winner", true), HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>(makeMap("winner", false), HttpStatus.CREATED);
+		}
+	}
+
+	private boolean allShipsSunk(GamePlayer gamePlayer) {
+		List<String> allSalvoLocations = getSalvoLocations(gamePlayer);
+
+		return getShipLocations(getEnemyPlayer(gamePlayer))
+				.stream().allMatch(l -> allSalvoLocations.contains(l));
+	}
+
+	private int gameStatus(GamePlayer gamePlayer) {
+		GamePlayer enemyPlayer = getEnemyPlayer(gamePlayer);
+
+		if(enemyPlayer != null) {
+			if(enemyPlayer.getShips().isEmpty()) {
+				return 1;
+			} else if((allShipsSunk(enemyPlayer) && gamePlayer.getSalvoes().size() > 0)
+				|| (allShipsSunk(gamePlayer) && gamePlayer.getSalvoes().size() > 0)) {
+				if(gamePlayer.getGame().getGameScores().isEmpty()) {
+					setScores(gamePlayer);
+					return 2;
+				} else {
+					setScores(gamePlayer);
+					return 2;
+				}
+			} else if(enemyPlayer.getLastTurn() < gamePlayer.getLastTurn()) {
+				return 1;
+			} else if(enemyPlayer.getLastTurn() == gamePlayer.getLastTurn()) {
+				if(gamePlayer.isFirst()) {
+					return 0;
+				} else {
+					return 1;
+				}
+			} else if(gamePlayer.getLastTurn() < enemyPlayer.getLastTurn()) {
+				if(allShipsSunk(enemyPlayer) || allShipsSunk(gamePlayer)) {
+					return 2;
+				} else {
+					return 0;
+				}
+			}
+			return 1;
+		} else if(!gamePlayer.getShips().isEmpty()) {
+			return 1;
+		} else {
+			return 1;
+		}
+	}
+
+	private void setScores(GamePlayer gamePlayer) {
+		GamePlayer enemyPlayer = getEnemyPlayer(gamePlayer);
+
+		if(allShipsSunk(enemyPlayer) && allShipsSunk(gamePlayer)) {
+			gameScoreRepository.save(new GameScore(gamePlayer.getPlayer(), gamePlayer.getGame(), 0, 0.5, new Date()));
+			gameScoreRepository.save(new GameScore(enemyPlayer.getPlayer(), enemyPlayer.getGame(), 0, 0.5, new Date()));
+		} else if(allShipsSunk(gamePlayer)) {
+			gameScoreRepository.save(new GameScore(gamePlayer.getPlayer(), gamePlayer.getGame(), 0, 1, new Date()));
+			gameScoreRepository.save(new GameScore(enemyPlayer.getPlayer(), enemyPlayer.getGame(), 0, 0, new Date()));
+		} else if(allShipsSunk(enemyPlayer)) {
+			gameScoreRepository.save(new GameScore(gamePlayer.getPlayer(), gamePlayer.getGame(), 0, 0, new Date()));
+			gameScoreRepository.save(new GameScore(enemyPlayer.getPlayer(), enemyPlayer.getGame(), 0, 1, new Date()));
+		}
+	}
+
+	private void setGameOver(Game game) {
+		game.setFinished(true);
+		gameRepository.save(game);
+	}
 }

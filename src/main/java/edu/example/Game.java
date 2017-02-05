@@ -20,6 +20,7 @@ public class Game {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private Date creationDate;
+	private boolean finished;
 
 	@OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
 	Set<GamePlayer> games;
@@ -47,7 +48,15 @@ public class Game {
 
 	public Set<GamePlayer> getGamePlayers() { return games; }
 
-	public Set<GameScore> getGame() {
+	public Set<GameScore> getGameScores() {
 		return gameScores;
+	}
+
+	public boolean isFinished() {
+		return finished;
+	}
+
+	public void setFinished(boolean finished) {
+		this.finished = finished;
 	}
 }

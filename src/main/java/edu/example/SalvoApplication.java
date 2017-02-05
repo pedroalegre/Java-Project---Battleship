@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootApplication
@@ -61,7 +62,7 @@ public class SalvoApplication {
 			Ship s2 = new Ship("Carrier", loc4);
 			Ship s3 = new Ship("Battleship", loc1);
 			Ship s4 = new Ship("Submarine", loc3);
-			Ship s5 = new Ship("Patrol Boat", loc5);
+			Ship s5 = new Ship("PatrolBoat", loc5);
 			Ship s6 = new Ship("Destroyer", loc6);
 			Ship s7 = new Ship("Battleship", loc7);
 			Ship s8 = new Ship("Submarine", loc8);
@@ -119,10 +120,10 @@ public class SalvoApplication {
 			gp4.addSalvo(sal11);
 			gp4.addSalvo(sal12);
 
-			GameScore gs1 = new GameScore(p1, g1, 3600, 1);
-			GameScore gs2 = new GameScore(p2, g1, 7200, 0);
-			GameScore gs3 = new GameScore(p2, g2, 9800, 0.5);
-			GameScore gs4 = new GameScore(p3, g2, 9800, 0.5);
+			GameScore gs1 = new GameScore(p1, g1, 3600, 1, new Date());
+			GameScore gs2 = new GameScore(p2, g1, 7200, 0, new Date());
+			GameScore gs3 = new GameScore(p2, g2, 9800, 0.5, new Date());
+			GameScore gs4 = new GameScore(p3, g2, 9800, 0.5, new Date());
 
 			// save a few of players
 			player.save(p1);

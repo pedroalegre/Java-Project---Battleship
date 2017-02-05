@@ -33,6 +33,8 @@ public class Ship {
 	@Column(name = "ship_location")
 	private List<String> shipLocations = new ArrayList<>();
 
+	private boolean sunk = false;
+
 	public Ship() {}
 
 	public Ship(String shipType, List<String> shipLocations) {
@@ -53,4 +55,12 @@ public class Ship {
 	public List<String> getShipLocations() { return this.shipLocations; }
 
 	public void setGamePlayer(GamePlayer gamePlayer) { this.gamePlayer = gamePlayer; }
+
+	public boolean isSunk() {
+		return sunk;
+	}
+
+	public void setSunk(boolean sunk) {
+		this.sunk = sunk;
+	}
 }
