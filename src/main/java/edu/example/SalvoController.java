@@ -264,6 +264,7 @@ public class SalvoController {
 			gameRepository.save(game);
 
 			GamePlayer gamePlayer = new GamePlayer(player, game);
+			gamePlayer.setFirst(true);
 			gamePlayerRepository.save(gamePlayer);
 
 			return new ResponseEntity<>(makeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);

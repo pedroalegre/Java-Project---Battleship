@@ -2,33 +2,40 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<title>Salvo!</title>
+		<title>Battleship!</title>
 		<link rel="stylesheet" href="games.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	</head>
 	<body>
-		<ol id="gameslist"></ol>
-		<form id="loginform" name="loginform">
-			<label for="username">Username: </label><input id="username" name="username"><br/>
-			<label for="password">Password:</label><input id="password" name="password"><br/>
-			<button type="submit">Login</button>
-		</form>
+		<div class="form-group panel panel-default">
+			<div class="panel panel-heading">Welcome to Battleship</div>
+			<div class="panel panel-body">
+				<form id="loginform" name="loginform">
+					<label for="username">Username: </label><input class="form-control" id="username" name="username"><br/>
+					<label for="password">Password:</label><input class="form-control" id="password" name="password"><br/>
+					<button class="btn btn-success" type="submit">Login</button>
+				</form>
+				<form id="signupform" name="signinform">
+					<button class="btn btn-info">Sign up</button>
+				</form>
+			</div>
+		</div>
+		<div class="mainPanel">
+			<ol id="gameslist"></ol>
+			<div id="actionButtons">
+				<form id="logoutform" name="logoutform">
+					<button class="btn btn-danger">Log out</button>
+				</form>
+				<form id="createGame" name="createGame">
+					<button class="btn btn-primary">New Game</button>
+				</form>
+			</div>
+			<table class="table table-bordered" id="leaderboard">
+				<thead class="leaderboardHeader"></thead>
+				<tbody class="leaderboardBody"></tbody>
+			</table>
+		</div>
 
-		<form id="logoutform" name="logoutform">
-			<button>Log out</button>
-		</form>
-
-		<form id="signupform" name="signinform">
-			<button>Sign up</button>
-		</form>
-		<form id="createGame" name="createGame">
-			<button>New Game</button>
-		</form>
-
-		<table class="table table-bordered" id="leaderboard">
-			<thead class="leaderboardHeader"></thead>
-			<tbody class="leaderboardBody"></tbody>
-		</table>
 
 		<script src="https://code.jquery.com/jquery-2.2.0.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>

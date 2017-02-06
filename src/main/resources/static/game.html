@@ -8,8 +8,8 @@
 	</head>
 	<body>
 		<div class="grids">
-			<div class="shipsGrid">
-				<h1>Ship Locations!</h1>
+			<div class="shipsGrid shipsGridStart">
+				<h1>My board</h1>
 				<div class="playerInfo">
 
 				</div>
@@ -20,12 +20,11 @@
 					<tbody class="rows">
 
 					</tbody>
-					<div class="scan"></div>
 				</table>
+				<div class="scan"></div>
 			</div>
-
 			<div class="salvoesGrid">
-				<h1>Salvoes Locations!</h1>
+				<h1>Opponent board</h1>
 				<div class="playerInfo">
 
 				</div>
@@ -41,6 +40,16 @@
 			</div>
 			<div class="buttonsBoard">
 				<div class="placeShips">
+
+				</div>
+				<div class="addSalvoes">
+					<div id="salvoButtons">
+						<button id="placeSalvoesButton">Place Salvoes</button>
+						<button id="fireSalvoesButton">Fire Salvoes</button>
+						<button id="cancelSalvoesButton">Cancel</button>
+					</div>
+				</div>
+				<div id="buttons">
 					<form id="addShips" name="addShips">
 						<button id="addShipsButton">Place Ships</button>
 						<button id="confirmButton">Confirm</button>
@@ -50,13 +59,6 @@
 						<input type="radio" name="position" value="horizontal" checked> Horizontal
 						<input type="radio" name="position" value="vertical"> Vertical
 					</form>
-				</div>
-				<div class="addSalvoes">
-					<div id="salvoButtons">
-						<button id="placeSalvoesButton">Place Salvoes</button>
-						<button id="fireSalvoesButton">Fire Salvoes</button>
-						<button id="cancelSalvoesButton">Cancel</button>
-					</div>
 				</div>
 				<form id="leaderboard" name="leaderboard">
 					<button>Leaderboard</button>
@@ -73,7 +75,6 @@
 					</tbody>
 				</table>
 			</div>
-
 		</div>
 
 		<script src="https://code.jquery.com/jquery-2.2.0.js"></script>

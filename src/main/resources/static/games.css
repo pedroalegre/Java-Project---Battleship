@@ -1,0 +1,18 @@
+.form-group {
+	width: 500px;
+	margin: auto;
+}
+
+.mainPanel {
+	margin: auto;
+	width: 1000px;
+	display: flex;
+}
+
+#actionButtons {
+	align-content: center;
+}
+
+#leaderboard {
+	width: 500px;
+}

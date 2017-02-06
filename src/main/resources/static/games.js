@@ -17,6 +17,7 @@ $(document).ready(function ($) {
 
 		}).done(function(data, textStatus, jqXHR) {
 			alert("Leaving so soon?");
+			$(".form-group").show();
 			$("#loginform").show();
 			$("#logoutform").hide();
 			$("#leaderboard").hide();
@@ -37,10 +38,12 @@ $(document).ready(function ($) {
 		}).done(function(data, textStatus, jqXHR) {
 			var signupMessage = "Sign up successful. Welcome to Battleship, Admiral.";
 			loginUser(signupMessage);
+			$(".form-group").hide();
 			$("#loginform").hide();
 			$("#logoutform").show();
 			$("#leaderboard").show();
 			$("#signupform").hide();
+			$("#gameslist").show();
 
 		}).fail(function(jqXHR, textStatus, errorThrown) {
 			alert("Stop hacking and put the right credentials!!");
@@ -301,11 +304,13 @@ function loginUser(welcomeMessage) {
 		createHeader();
 		getPlayerScores();
 		alert(welcomeMessage);
+		$(".form-group").hide();
 		$("#loginform").hide();
 		$("#logoutform").show();
 		$("#leaderboard").show();
 		$("#signupform").hide();
 		$("#createGame").show();
+		$("#gameslist").show();
 
 	})
 	.fail(function(jqXHR, textStatus, errorThrown) {

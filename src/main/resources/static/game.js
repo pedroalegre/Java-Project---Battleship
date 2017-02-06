@@ -37,6 +37,7 @@ $(document).ready(function ($) {
 	$("#positionButton").hide();
 	$("#fireSalvoesButton").hide();
 	$("#cancelSalvoesButton").hide();
+	$(".salvoesGrid").hide();
 
 	$("#leaderboard").on("click", function() {
 		window.location.replace("games.html");
@@ -70,6 +71,7 @@ $(document).ready(function ($) {
 
 		if(validateShipsPlaced()) {
 			paintShips();
+			window.location.reload();
 		} else {
 			alert("Please place all ships");
 		}
@@ -194,15 +196,29 @@ function drawShips (gamePlayerValue) {
 	var url = "api/game_view/" + gamePlayerValue.gp;
 	var playerId = 0;
 	$.getJSON( url, function(data) {
+		var gameStatus = data.gameStatus;
+
+		drawGameStatus(gameStatus, data);
 		playersTitle();
+		console.log(data.ships[0].locations);
 		if(data.ships[0].locations.length > 0) {
 			$("#addShipsButton").hide();
-			$("#placeSalvoesButton").show();
+			$(".salvoesGrid").show();
+			if(gameStatus == 0) {
+				$("#placeSalvoesButton").show();
+			} else if(gameStatus == 1) {
+				$("#placeSalvoesButton").hide();
+			}
+			//$("#placeSalvoesButton").show();
+			$(".shipsGrid .columnHeader").addClass("columnHeaderSmall").css("font-size", 10);
+			$(".shipsGrid .rowHeader").addClass("rowHeaderSmall").css("font-size", 10);
+			$(".shipsGrid .cell").addClass("cellSmall");
+			$(".shipsGrid").removeClass("shipsGridStart");
+			$(".shipsGrid .scan").remove();
 		} else {
 			$("#addShipsButton").show();
 			$("#placeSalvoesButton").hide();
 		}
-		console.log(data.ships.length);
 
 		//show the game and players info
 		$.each( data.GamePlayers, function(player) {
@@ -493,4 +509,64 @@ function getPlayerHits(gamePlayerValue) {
 		})
 
 	});
+}
+
+function checkGameStatus(gamePlayerValue) {
+	var gpId = gamePlayerValue.gp;
+
+	setInterval(function() {
+		$.get({
+			url: "/api/game_view/" + gpId,
+
+		}).done(function(data) {
+		console.log(data.gameStatus);
+			if(data.gameStatus != 1) {
+				window.location.reload();
+			}
+		})
+	}, 500);
+}
+
+function drawGameStatus(gameStatus, data) {
+	switch(gameStatus) {
+		// Can fire salvoes
+		case 0:
+			gameStatusCase0(data);
+			break;
+
+		// Wait for other player or salvoes
+		case 1:
+			checkGameStatus(getGamePlayerPath(location.search));
+			gameStatusCase1(data);
+			break;
+
+		// Game over
+		case 2:
+			gameStatusCase2(data);
+	}
+}
+
+function gameStatusCase0(data) {
+	$("#placeSalvoesButton").show();
+}
+
+function gameStatusCase1(data) {
+	alert("Wait for the other player");
+	$("#placeSalvoesButton").hide();
+}
+
+function gameStatusCase2(data) {
+	var gpId = gamePlayerValue.gp;
+
+	$.post({
+		url: "/api/" + gpId + "/winner",
+
+	}).done(function (data, textStatus, jqXHR){
+		if(jqXHR.responseJSON.winner) {
+			alert("You win!");
+		} else {
+			alert("You lose!");
+		}
+
+	})
 }

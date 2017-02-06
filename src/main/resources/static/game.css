@@ -1,36 +1,91 @@
+body {
+
+}
+
 .grids {
+	background-image: url("images/pipboy_3.png");
+	background-size: 1000px;
+	background-repeat: no-repeat;
 	display: flex;
+	width: 1000px;
+	height: 562px;
 	flex-direction: row;
+	margin: auto;
 }
 
 .grid {
+	line-height: 0px !important;
     border-collapse: collapse;
-    width: 450px;
+
+}
+
+h1 {
+	margin-top: 10px !important;
+	margin-bottom: 20px !important;
+	color: #8df776 !important;
 }
 
 .cell {
-	line-height: 40px;
-    height:40px;
-    width:40px;
-    border:0.5px solid #0b3003;
-    display:inline-block;
+	line-height: 33px;
+    height: 33px;
+    width: 33px;
+    border: 0.5px solid #0b3003;
+    display: inline-block;
+    background: black;
+    text-align: center;
+}
+
+.cellSmall {
+	line-height: 15px;
+    height: 15px;
+    width: 15px;
+    border: 0.5px solid #0b3003;
+    display: inline-block;
     background: black;
     text-align: center;
 }
 
 .columnHeader, .rowHeader {
-    line-height: 40px;
-    height:40px;
-    width:40px;
-    border:0.5px solid black;
-    display:inline-block;
+    line-height: 33px;
+    height: 33px;
+    width: 33px;
+    border: 0.5px solid black;
+    display: inline-block;
     background-color: #8df776;
     color: black;
     text-align: center;
 }
 
+.columnHeaderSmall, .rowHeaderSmall {
+    line-height: 15px;
+    height: 15px;
+    width: 15px;
+    border: 0.5px solid black;
+    display: inline-block;
+    background-color: #8df776;
+    color: black;
+    text-align: center;
+}
+
+.shipsGrid {
+	margin-top: 60px;
+	margin-left: 10px;
+	width: 240px;
+}
+
+.shipsGridStart {
+	margin-top: 0px;
+	margin-left: 300px;
+	width: auto;
+}
+
+.salvoesGrid {
+	margin-top: 8px;
+	margin-left: 65px;
+}
+
 .playerInfo {
-    width: 450px;
+    width: inherit;
     display: flex;
     flex-direction; row;
     justify-content: space-between;
@@ -50,22 +105,24 @@
 }
 
 .shipsList {
+	margin-left: 5px;
 	list-style: none;
 	padding: 0;
 }
 
 .shipBlock {
 	background: #7ff12a;
-	height: 40px;
+	height: 33px;
 }
 
 .shipPlaced {
 	background: #8b9287;
-	height: 40px;
+	height: 33px;
 }
 
 .scan {
-    width: 450px;
+    width: 580px;
+    margin-left: -40px;
     height: 80px;
     background: linear-gradient(rgba(0,0,0,0),#7ff12a);
     position: absolute;
@@ -77,8 +134,12 @@
     opacity: 0.25;
 }
 
+.buttonsBoard {
+	margin-top: 50px;
+}
+
 @keyframes scan{
   0{top:-80px;}
-  70%{top:600px;}
-  100%{top:600px;}
+  70%{top:482px;}
+  100%{top:482px;}
 }
