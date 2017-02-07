@@ -90,6 +90,7 @@ h1 {
     flex-direction; row;
     justify-content: space-between;
     margin-bottom: 5px;
+    color: #8df776;
 }
 
 .hasShip {
@@ -137,6 +138,10 @@ h1 {
 
 .buttonsBoard {
 	margin-top: 50px;
+}
+
+#positionButton {
+	color: #8df776;
 }
 
 @keyframes scan{
